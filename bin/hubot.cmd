@@ -1,3 +1,3 @@
 @echo off
 
-npm install && node_modules\.bin\hubot.cmd --name "LichBot" %* 
+npm install && node_modules\.bin\hubot.cmd --name "lichbot" %* 
