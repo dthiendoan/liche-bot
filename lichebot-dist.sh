@@ -8,4 +8,6 @@ export HUBOT_HIPCHAT_PASSWORD=""
 #export HUBOT_HIPCHAT_XMPP_DOMAIN="btf.hipchat.com"
 #export HUBOT_HIPCHAT_RECONNECT="true"
 
+
+
 bin/hubot --adapter hipchat
