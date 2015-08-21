@@ -12,18 +12,19 @@ var SimpleDiceRoller = function(robot) {
     );
   };
 
-  robot.hear(/^\/dice\s+(\d+)[dD](\d+)\s*$/, function (msg) {
+  robot.hear(/^\/dice\s+(\d+)[dD](\d+)(\s+.*)?$/, function (msg) {
     var nRolls = parseInt(msg.match[1]);
     var nFaces = parseInt(msg.match[2]);
     if (!checkParameters(nRolls, nFaces)) {
-      msg.reply("Please do not throw more than 10 dice and 9999 faces maximum.")
+      msg.reply("Please do not throw 1-10 dice and 1-9999 faces per die.")
 
       return;
     }
 
     var rolls = dice.rollMultiple(nRolls, nFaces);
+    var reply = msg.match[3] ? msg.match[3].trim() + ': ' : '';
 
-    msg.reply(rolls.join(', ') + " - Total: " + dice.sumRoll(rolls));
+    msg.reply(reply + rolls.join(', ') + " - Total: " + dice.sumRoll(rolls));
   });
 };
 
