@@ -12,9 +12,12 @@ var SimpleDiceRoller = function(robot) {
     );
   };
 
-  robot.hear(/^\/dice\s+(\d+)[dD](\d+)(\s+.*)?$/, function (msg) {
+  robot.hear(/^\/dice\s+(\d+)[dD](\d+)([\+-]\d+)?(\s+.*)?$/, function (msg) {
     var nRolls = parseInt(msg.match[1]);
     var nFaces = parseInt(msg.match[2]);
+    var constant = msg.match[3] !== undefined ? parseInt(msg.match[3]) : 0;
+    var comment = msg.match[4] !== undefined ? msg.match[4].trim() : '';
+
     if (!checkParameters(nRolls, nFaces)) {
       msg.reply("Please do not throw 1-10 dice and 1-9999 faces per die.")
 
@@ -22,9 +25,10 @@ var SimpleDiceRoller = function(robot) {
     }
 
     var rolls = dice.rollMultiple(nRolls, nFaces);
-    var reply = msg.match[3] ? msg.match[3].trim() + ': ' : '';
+    var reply = comment ? comment + ': ' : '';
+    var total = dice.sumRoll(rolls) + constant;
 
-    msg.reply(reply + rolls.join(', ') + " - Total: " + dice.sumRoll(rolls));
+    msg.reply(reply + rolls.join(', ') + " - Total: " + total);
   });
 };
 
