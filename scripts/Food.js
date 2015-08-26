@@ -16,13 +16,13 @@ var Food = function(robot) {
 
   var addPlace = function(place_name, msg) {
     var connection = connectDb();
-    
-    connection.query('INSERT INTO food (name) VALUES("' + place_name + '")', function(err) {
+    var name = connection.escape(place_name);
+    connection.query('INSERT INTO food (name) VALUES("' + name + '")', function(err) {
       if (err) {
         msg.reply('Something broke');
       }
 
-      msg.reply('Added ' + place_name);
+      msg.reply('Added ' + name);
     });
     
     disconnectDb(connection);
