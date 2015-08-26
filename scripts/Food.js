@@ -28,10 +28,10 @@ var Food = function(robot) {
     disconnectDb(connection);
   }
 
-  var deletePlace = function(place_id, msg) {
+  var deletePlace = function(place_name, msg) {
     var connection = connectDb();
     
-    connection.query('DELETE FROM food WHERE id=(' + place_id + ')', function(err) {
+    connection.query('DELETE FROM food WHERE name=(' + place_name + ')', function(err) {
       if (err) {
         msg.reply('Something broke');
       }
@@ -52,7 +52,7 @@ var Food = function(robot) {
 
       result = '\n';
       rows.forEach(function (row) {
-        result += row.id + '. ' + row.name + '\n';
+        result += '- ' + row.name + '\n';
       });
 
       msg.reply(result);
