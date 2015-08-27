@@ -1,4 +1,4 @@
-var Dice = require('./Dice.js')
+var Dice = require('./lib/Dice.js')
 
 var Gygax = function(robot) {
   var dice = new Dice();
