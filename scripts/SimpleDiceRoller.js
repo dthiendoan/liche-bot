@@ -1,7 +1,9 @@
-var Dice = require('./lib/Dice.js')
+var Dice = require('./lib/Dice.js');
+var AntiWeasel = require('./lib/AntiWeasel.js');
 
 var SimpleDiceRoller = function(robot) {
   var dice = new Dice();
+  var antiWeasel = new AntiWeasel();
 
   var checkParameters = function (nRolls, nFaces) {
     return (
@@ -17,6 +19,11 @@ var SimpleDiceRoller = function(robot) {
     var nFaces = parseInt(msg.match[2]);
     var constant = msg.match[3] !== undefined ? parseInt(msg.match[3]) : 0;
     var comment = msg.match[4] !== undefined ? msg.match[4].trim() : '';
+    if (!antiWeasel.check(comment)) {
+      msg.reply('Don\'t be a weasel');
+
+      return;
+    }
 
     if (!checkParameters(nRolls, nFaces)) {
       msg.reply("Please do not throw 1-10 dice and 1-9999 faces per die.")

@@ -1,8 +1,11 @@
 var Config = require('../config.js');
 var Mysql = require('mysql');
+var AntiWeasel = require('./lib/AntiWeasel.js');
 
 var Food = function(robot) {
   var config = new Config();
+  var antiWeasel = new AntiWeasel();
+
   var connectDb = function() {
     var connection = Mysql.createConnection(config.mysql);
     connection.connect();
@@ -83,7 +86,11 @@ var Food = function(robot) {
   });
 
   robot.hear(/^\/food\s+add\s+(.+?)\s*$/, function (msg) {
-    addPlace(msg.match[1], msg);
+    if (!antiWeasel.check(msg.match[1])) {
+      msg.reply('Don\'t be a weasel');
+    } else {
+      addPlace(msg.match[1], msg);
+    }
   });
 
   robot.hear(/^\/food\s+remove\s+(.+?)\s*$/, function (msg) {
