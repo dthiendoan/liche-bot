@@ -75,7 +75,7 @@ var Roulette = function (robot) {
     var survival_rate;
 
     var connection = connectDb();
-    connection.query('SELECT * FROM roulette', function(err, rows) {
+    connection.query('SELECT * FROM roulette ORDER BY deaths/tries ASC', function(err, rows) {
       if (err) {
         msg.reply('Something broke');
       }
