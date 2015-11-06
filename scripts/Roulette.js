@@ -89,7 +89,7 @@ var Roulette = function (robot) {
           row.user + ' - ' +
           'Tries: ' + row.tries + ' - ' +
           'Deaths: ' + row.deaths + ' - ' +
-          'Survival rate: ' + survival_rate + '%\n';
+          'Survival rate: ' + survival_rate.toFixed(2) + '%\n';
       });
 
       msg.reply(result);
