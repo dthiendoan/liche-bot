@@ -98,21 +98,56 @@ var Roulette = function (robot) {
     return stats;
   }
 
+  var getDoubleTryMessage = function (msg) {
+    var messages = [
+      ', you have so much to live for, don\'t throw your life away',
+      ', are you suicidal ?',
+      ', you should not die like that'
+    ];
+
+    msg.reply(messages[Math.floor(Math.rand() * messages.length)]);
+  }
+
+  var getMissedMessage = function (msg) {
+    var messages = [
+      '%s nearly died of fear.',
+      '%s started breathing again.',
+      '%s nearly fainted.'
+    ];
+
+    msg.emote(' - *click* - ' + sprintf(messages[Math.floor(Math.rand() * messages.length)], msg.message.user.name));
+  }
+
+  var getShotMessage = function (msg) {
+    var messages = [
+      '%s\'s brain is splattered on the opposite wall.',
+      '%s is DEAD.',
+      '%s died in vain.',
+      '%s is just one more person to die in this stupid game.'
+    ];
+
+    msg.emote(' - *BANG* - ' + sprintf(messages[Math.floor(Math.rand() * messages.length)], msg.message.user.name));
+  }
+
   robot.hear(/^\/roulette\s*$/, function (msg) {
     var person = msg.message.user.mention_name
 
     var result = pullTrigger(person);
     if (result === true) {
       addHit(person);
-      msg.emote(' - *BANG* YOU LOSE !');
+      getShotMessage(msg);
     } else if (result === undefined) {
-      msg.reply('are you suicidal ?');
+      getDoubleTryMessage(msg);
     } else if (result === false) {
       addMiss(person);
-      msg.emote(' - *click*');
+      getMissedMessage(msg);
     }
   });
 
+  robot.hear(/^\/roulette\s+spin\s*$/, function (msg) {
+    spinBarrel();
+    msg.emote(' - *spins*');
+  });
 
   robot.hear(/^\/roulette\s+stats\s*$/, function (msg) {
     getStats(msg);
