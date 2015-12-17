@@ -105,28 +105,29 @@ var Roulette = function (robot) {
       ', you should not die like that'
     ];
 
-    msg.reply(messages[Math.floor(Math.rand() * messages.length)]);
+    msg.reply(messages[Math.floor(Math.random() * messages.length)]);
   }
 
   var getMissedMessage = function (msg) {
     var messages = [
-      '%s nearly died of fear.',
-      '%s started breathing again.',
-      '%s nearly fainted.'
+      '%name% will die tomorrow.',
+      '%name% still lives... for now.',
+      '%name% fails everything, even suicide.'
     ];
 
-    msg.emote(' - *click* - ' + sprintf(messages[Math.floor(Math.rand() * messages.length)], msg.message.user.name));
+    msg.emote(' - *click* - ' + messages[Math.floor(Math.random() * messages.length)].replace('%name%', msg.message.user.name));
   }
 
   var getShotMessage = function (msg) {
     var messages = [
-      '%s\'s brain is splattered on the opposite wall.',
-      '%s is DEAD.',
-      '%s died in vain.',
-      '%s is just one more person to die in this stupid game.'
+      '%name%\'s brain is splattered on the opposite wall.',
+      '%name% is DEAD.',
+      '%name%, you LOSE.',
+      '%name% died in vain.',
+      '%name% is just one more person to die in this stupid game.'
     ];
 
-    msg.emote(' - *BANG* - ' + sprintf(messages[Math.floor(Math.rand() * messages.length)], msg.message.user.name));
+    msg.emote(' - *BANG* - ' + messages[Math.floor(Math.random() * messages.length)].replace('%name%', msg.message.user.name));
   }
 
   robot.hear(/^\/roulette\s*$/, function (msg) {
