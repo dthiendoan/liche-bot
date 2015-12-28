@@ -141,7 +141,7 @@ var Deck = function (robot) {
     }
 
     var manyThingsCard = many_things[card.number][card.color];
-    msg.reply(manyThingsCard.title+ " - " + manyThingsCard.description);
+    msg.reply(getCardName(card) + " - " + manyThingsCard.title + " - " + manyThingsCard.description);
   });
 
 
