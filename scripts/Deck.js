@@ -1,3 +1,5 @@
+var many_things = require('../data/many_things.json');
+
 var Deck = function (robot) {
   var deck;
 
@@ -125,9 +127,24 @@ var Deck = function (robot) {
       dealDeck();
       msg.reply('The deck is empty, let me recreate the deck.');
       card = pickCard();
-   }
+    }
+
     msg.reply(getCardName(card));
   });
+
+  robot.hear(/^\/deck\s+manythings\s*$/, function (msg) {
+    var card = pickCard();
+    if (card == undefined) {
+      dealDeck();
+      msg.reply('The deck is empty, let me recreate the deck.');
+      card = pickCard();
+    }
+
+    var manyThingsCard = many_things[card.number][card.color];
+    msg.reply(manyThingsCard.title+ " - " + manyThingsCard.description);
+  });
+
+
 }
 
 module.exports = Deck;
