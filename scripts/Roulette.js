@@ -29,13 +29,16 @@ var Roulette = function (robot) {
 
   var addHit = function (person) {
     var connection = connectionHelper.getConnection();
-    var user = connection.escape(person)
 
-    connection.query('SELECT * FROM roulette WHERE user=(' + user + ')', function (err, rows) {
+    connection.query('SELECT * FROM roulette WHERE user = ?', [person], function (err, rows) {
       if (rows != undefined && rows.length > 0) {
-        connection.query('UPDATE roulette SET tries=tries+1, deaths=deaths+1 WHERE user=(' + user + ')', function (err) {});
+        connection.query(
+          'UPDATE roulette SET tries = tries+1, deaths = deaths+1 WHERE user = ?',
+          [person],
+          function (err) {}
+        );
       } else {
-        connection.query('INSERT INTO roulette (user, tries, deaths) VALUES (' + user +', 1, 1)', function (err) {});
+        connection.query('INSERT INTO roulette (user, tries, deaths) VALUES (?, 1, 1)', [person], function (err) {});
       }
 
     });
@@ -43,13 +46,12 @@ var Roulette = function (robot) {
 
   var addMiss = function (person) {
     var connection = connectionHelper.getConnection();
-    var user = connection.escape(person)
 
-    connection.query('SELECT * FROM roulette WHERE user=(' + user + ')', function (err, rows) {
+    connection.query('SELECT * FROM roulette WHERE user = ?', [person], function (err, rows) {
       if (rows != undefined && rows.length > 0) {
-        connection.query('UPDATE roulette SET tries=tries+1 WHERE user=(' + user + ')', function (err) {});
+        connection.query('UPDATE roulette SET tries = tries+1 WHERE user=(?)', [person], function (err) {});
       } else {
-        connection.query('INSERT INTO roulette (user, tries, deaths) VALUES (' + user +', 1, 0)', function (err) {});
+        connection.query('INSERT INTO roulette (user, tries, deaths) VALUES (?, 1, 0)', [person], function (err) {});
       }
 
     });
@@ -58,7 +60,6 @@ var Roulette = function (robot) {
   var getStats = function (msg) {
     var connection = connectionHelper.getConnection();
     var stats = [];
-    var row_result;
     var survival_rate;
 
     connection.query('SELECT * FROM roulette ORDER BY deaths/tries ASC', function(err, rows) {
@@ -69,7 +70,7 @@ var Roulette = function (robot) {
       var result = 'Roulette statistics: \n';
 
       rows.forEach(function (row) {
-        survival_rate = (1 - parseFloat(row.deaths) / parseFloat(row.tries)) * 100; 
+        survival_rate = (1 - parseFloat(row.deaths) / parseFloat(row.tries)) * 100;
 
         result +=
           row.user + ' - ' +

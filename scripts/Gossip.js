@@ -6,7 +6,8 @@ var Gossip = function(robot) {
 
   var addGossip = function(gossip, msg) {
     var connection = connectionHelper.getConnection();
-    connection.query('INSERT INTO gossip (gossip_text) VALUES(?)', gossip, function(err) {
+
+    connection.query('INSERT INTO gossip (gossip_text) VALUES (?)', [gossip], function(err) {
       if (err) {
         msg.reply('Something broke');
       }
@@ -17,7 +18,7 @@ var Gossip = function(robot) {
 
   var deleteGossip = function(id, msg) {
     var connection = connectionHelper.getConnection();
-    connection.query('DELETE FROM gossip WHERE id = ?', id, function(err) {
+    connection.query('DELETE FROM gossip WHERE id = ?', [id], function(err) {
       if (err) {
         msg.reply('Something broke');
       }

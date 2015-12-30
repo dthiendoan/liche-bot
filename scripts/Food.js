@@ -6,9 +6,8 @@ var Food = function(robot) {
 
   var addPlace = function(place_name, msg) {
     var connection = connectionHelper.getConnection();
-    var name = connection.escape(place_name);
 
-    connection.query('INSERT INTO food (name) VALUES(' + name + ')', function(err) {
+    connection.query('INSERT INTO food (name) VALUES (?)', [place_name], function(err) {
       if (err) {
         msg.reply('Something broke');
       }
@@ -19,9 +18,8 @@ var Food = function(robot) {
 
   var deletePlace = function(place_name, msg) {
     var connection = connectionHelper.getConnection();
-    var name = connection.escape(place_name);
 
-    connection.query('DELETE FROM food WHERE name=(' + name + ')', function(err) {
+    connection.query('DELETE FROM food WHERE name = ?', [place_name], function(err) {
       if (err) {
         msg.reply('Something broke');
       }
