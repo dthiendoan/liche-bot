@@ -1,4 +1,4 @@
-var Config = require('../config.js');
+var Config = require('../config/config.js');
 var Mysql = require('mysql');
 
 var Roulette = function (robot) {

@@ -1,0 +1,10 @@
+var Config = function() {
+  this.mysql = {
+    'host': '',
+    'user': '',
+    'password': '',
+    'database': ''
+  };
+}
+
+module.exports = Config
