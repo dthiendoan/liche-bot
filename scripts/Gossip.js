@@ -1,25 +1,11 @@
-var Config = require('../config/config.js');
-var Mysql = require('mysql');
+var connectionHelper = require('./lib/ConnectionHelper.js');
 var AntiWeasel = require('./lib/AntiWeasel.js');
 
 var Gossip = function(robot) {
-  var config = new Config();
   var antiWeasel = new AntiWeasel();
 
-  var connectDb = function() {
-    var connection = Mysql.createConnection(config.mysql);
-    connection.connect();
-
-    return connection;
-  }
-
-  var disconnectDb = function(connection) {
-    connection.end();
-  }
-
   var addGossip = function(gossip, msg) {
-    var connection = connectDb();
-
+    var connection = connectionHelper.getConnection();
     connection.query('INSERT INTO gossip (gossip_text) VALUES(?)', gossip, function(err) {
       if (err) {
         msg.reply('Something broke');
@@ -27,13 +13,10 @@ var Gossip = function(robot) {
 
       msg.reply('Gossip added');
     });
-    
-    disconnectDb(connection);
   }
 
   var deleteGossip = function(id, msg) {
-    var connection = connectDb();
-
+    var connection = connectionHelper.getConnection();
     connection.query('DELETE FROM gossip WHERE id = ?', id, function(err) {
       if (err) {
         msg.reply('Something broke');
@@ -41,12 +24,10 @@ var Gossip = function(robot) {
 
       msg.reply('Gossip deleted');
     });
-    
-    disconnectDb(connection);
   }
 
   var getGossip = function(words, msg) {
-    var connection = connectDb();
+    var connection = connectionHelper.getConnection();
     var query = 'SELECT * FROM gossip';
 
     if (words.length > 0) {
@@ -73,8 +54,6 @@ var Gossip = function(robot) {
       }
       msg.reply('[id:' + rows[0].id + ']\n' + rows[0].gossip_text);
     });
-
-    disconnectDb(connection);
   }
 
   robot.hear(/^\/gossip\s+add\s+([\s\S]+?)$/, function (msg) {

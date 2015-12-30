@@ -1,22 +1,8 @@
-var Config = require('../config/config.js');
-var Mysql = require('mysql');
+var connectionHelper = require('./lib/ConnectionHelper.js');
 
 var Roulette = function (robot) {
   var shot;
   var lastPerson;
-
-  var config = new Config();
-
-  var connectDb = function() {
-    var connection = Mysql.createConnection(config.mysql);
-    connection.connect();
-
-    return connection;
-  }
-
-  var disconnectDb = function(connection) {
-    connection.end();
-  }
 
   var spinBarrel = function () {
     shot = Math.floor(Math.random() * 6);
@@ -42,7 +28,7 @@ var Roulette = function (robot) {
   spinBarrel();
 
   var addHit = function (person) {
-    var connection = connectDb();
+    var connection = connectionHelper.getConnection();
     var user = connection.escape(person)
 
     connection.query('SELECT * FROM roulette WHERE user=(' + user + ')', function (err, rows) {
@@ -56,7 +42,7 @@ var Roulette = function (robot) {
   }
 
   var addMiss = function (person) {
-    var connection = connectDb();
+    var connection = connectionHelper.getConnection();
     var user = connection.escape(person)
 
     connection.query('SELECT * FROM roulette WHERE user=(' + user + ')', function (err, rows) {
@@ -70,11 +56,11 @@ var Roulette = function (robot) {
   }
 
   var getStats = function (msg) {
+    var connection = connectionHelper.getConnection();
     var stats = [];
     var row_result;
     var survival_rate;
 
-    var connection = connectDb();
     connection.query('SELECT * FROM roulette ORDER BY deaths/tries ASC', function(err, rows) {
       if (err) {
         msg.reply('Something broke');

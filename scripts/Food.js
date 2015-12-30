@@ -1,25 +1,13 @@
-var Config = require('../config/config.js');
-var Mysql = require('mysql');
+var connectionHelper = require('./lib/ConnectionHelper.js');
 var AntiWeasel = require('./lib/AntiWeasel.js');
 
 var Food = function(robot) {
-  var config = new Config();
   var antiWeasel = new AntiWeasel();
 
-  var connectDb = function() {
-    var connection = Mysql.createConnection(config.mysql);
-    connection.connect();
-
-    return connection;
-  }
-
-  var disconnectDb = function(connection) {
-    connection.end();
-  }
-
   var addPlace = function(place_name, msg) {
-    var connection = connectDb();
+    var connection = connectionHelper.getConnection();
     var name = connection.escape(place_name);
+
     connection.query('INSERT INTO food (name) VALUES(' + name + ')', function(err) {
       if (err) {
         msg.reply('Something broke');
@@ -27,12 +15,10 @@ var Food = function(robot) {
 
       msg.reply('Added ' + name);
     });
-    
-    disconnectDb(connection);
   }
 
   var deletePlace = function(place_name, msg) {
-    var connection = connectDb();
+    var connection = connectionHelper.getConnection();
     var name = connection.escape(place_name);
 
     connection.query('DELETE FROM food WHERE name=(' + name + ')', function(err) {
@@ -42,13 +28,11 @@ var Food = function(robot) {
 
       msg.reply('Removed place ' + name);
     });
-    
-    disconnectDb(connection);
   }
 
   var listPlaces = function(msg) {
-    var connection = connectDb();
-   
+    var connection = connectionHelper.getConnection();
+
     connection.query('SELECT * FROM food', function(err, rows) {
       if (err) {
         msg.reply('Something broke');
@@ -61,12 +45,10 @@ var Food = function(robot) {
 
       msg.reply(result);
     });
-
-    disconnectDb(connection);
   }
 
   var pickPlace = function(msg) {
-    var connection = connectDb();
+    var connection = connectionHelper.getConnection();
 
     connection.query('SELECT * FROM food ORDER BY RAND() LIMIT 0, 1', function (err, rows) {
       if (err) {
