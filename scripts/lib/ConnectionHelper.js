@@ -10,11 +10,11 @@ var ConnectionHelper = function() {
   }
 
   this.getConnection = function() {
-    if (!connection) {
+    if (!connection || connection.state == 'protocol_error') {
       init();
     }
 
-    if (connection.state === 'disconnected' || connection.state === 'protocol_error') {
+    if (connection.state == 'disconnected') {
       connection.connect();
     }
 
