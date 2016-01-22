@@ -1,4 +1,7 @@
+var AntiWeasel = require('./lib/AntiWeasel.js');
+
 var RemindMe = function (robot) {
+  var antiWeasel = new AntiWeasel();
   var timeoutMap;
 
   var decodeDuration = function(value, durationString) {
@@ -39,9 +42,13 @@ var RemindMe = function (robot) {
       msg.reply(err);
       return;
     }
-    msg.reply('aye!');
-    console.log(duration);
-    setTimeout(function() {msg.reply(message);}, duration);
+
+    if (!antiWeasel.check(message)) {
+      msg.reply('Don\'t be a weasel');
+    } else {
+      msg.reply('aye!');
+      setTimeout(function() {msg.reply(message);}, duration);
+    }
   });
 };
 
