@@ -12,7 +12,7 @@ var Food = function(robot) {
         msg.reply('Something broke');
       }
 
-      msg.reply('Added ' + name);
+      msg.reply('Added ' + place_name);
     });
   }
 
@@ -24,7 +24,7 @@ var Food = function(robot) {
         msg.reply('Something broke');
       }
 
-      msg.reply('Removed place ' + name);
+      msg.reply('Removed place ' + place_name);
     });
   }
 
