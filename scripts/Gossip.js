@@ -27,31 +27,43 @@ var Gossip = function(robot) {
     });
   }
 
-  var getGossip = function(words, msg) {
+  var findGossip = function(text, msg) {
     var connection = connectionHelper.getConnection();
     var query = 'SELECT * FROM gossip';
+    var queryArgs = [];
 
-    if (words.length > 0) {
-
-
+    if (text != null && text.length > 0) {
       query += ' WHERE gossip_text LIKE ?';
-      words[0] = '%' + words[0] + '%';
-      for (var count = 1; count < words.length; count++) {
-      words[count] = '%' + words[count] + '%';
-        query += ' AND gossip_text LIKE ?';
-      }
+      queryArgs.push('%' + text + '%');
     }
 
     query += ' ORDER BY RAND() LIMIT 0,1';
 
-    connection.query(query, words, function(err, rows) {
+    connection.query(query, queryArgs, function(err, rows) {
       if (err) {
         msg.reply('Something broke');
       }
 
       if (rows.length === 0) {
-      	msg.reply('No gossip found.');
-      	return;
+        msg.reply('No gossip found.');
+        return;
+      }
+      msg.reply('[id:' + rows[0].id + ']\n' + rows[0].gossip_text);
+    });
+  }
+
+  var getGossip = function(id, msg) {
+    var connection = connectionHelper.getConnection();
+    var query = 'SELECT * FROM gossip where id = ?';
+
+    connection.query(query, [id], function(err, rows) {
+      if (err) {
+        msg.reply('Something broke');
+      }
+
+      if (rows.length === 0) {
+        msg.reply('No gossip found.');
+        return;
       }
       msg.reply('[id:' + rows[0].id + ']\n' + rows[0].gossip_text);
     });
@@ -70,14 +82,15 @@ var Gossip = function(robot) {
   });
 
   robot.hear(/^\/gossip\s*$/, function (msg) {
-    getGossip([], msg);
+    findGossip(null, msg);
   });
 
-  robot.hear(/^\/gossip\s+(.*?)\s*$/, function (msg) {
-    var words = msg.match[1].split(' ');
-    if (words[0] !== 'add' && words[0] !== 'remove') {
-	    getGossip(words, msg);
-    }
+  robot.hear(/^\/gossip\s+find\s+(.*?)\s*$/, function (msg) {
+    findGossip(msg.match[1], msg);
+  });
+
+  robot.hear(/^\/gossip\s+get\s+(.*?)\s*$/, function (msg) {
+    getGossip(msg.match[1], msg);
   });
 }
 
