@@ -1,4 +1,7 @@
-var Dice = require('./lib/Dice.js')
+var Dice = require('./lib/Dice.js');
+var help = require('./lib/Help.js');
+
+help.setHelpCategory('gygax4d6', 'rolls a D&D character', '/gygax_4d6 rolls a D&D character using 4d6 and removing the smallest roll')
 
 var Gygax4d6 = function(robot) {
   var dice = new Dice();

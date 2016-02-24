@@ -1,5 +1,8 @@
 var Dice = require('./lib/Dice.js');
 var AntiWeasel = require('./lib/AntiWeasel.js');
+var help = require('./lib/Help.js');
+
+help.setHelpCategory('dice', 'roll one or multiple dice', '/dice XdY rolls X dice with Y faces.')
 
 var SimpleDiceRoller = function(robot) {
   var dice = new Dice();

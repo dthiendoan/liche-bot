@@ -1,4 +1,7 @@
 var AntiWeasel = require('./lib/AntiWeasel.js');
+var help = require('./lib/Help.js');
+
+help.setHelpCategory('remind me', 'sets a reminder', '/remind me <something> in <time> will set a reminder. time will accept minutes, hours or days (e.g. 4 days)');
 
 var RemindMe = function (robot) {
   var antiWeasel = new AntiWeasel();

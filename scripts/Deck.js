@@ -1,4 +1,14 @@
 var many_things = require('../data/many_things.json');
+var help = require('./lib/Help.js');
+
+help.setHelpCategory(
+  'deck',
+  '54 cards deck',
+  '/deck deal - rebuild a new 54 cards deck\n' +
+  '/deck shuffle - shuffle the remaining cards in the deck\n' +
+  '/deck pick - draw the top card of the deck\n' +
+  '/deck manythings - draw the top card of the deck and display the result as a deck of many things'
+);
 
 var Deck = function (robot) {
   var deck;

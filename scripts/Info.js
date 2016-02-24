@@ -1,15 +1,12 @@
-var Info = function(robot) {
-  robot.respond(/help/, function (msg) {
-    msg.reply(
-      '\n/dice XdY: roll dice\n' +
-      '/gygax: Rolls character attributes with 3d6\n' +
-      '/gygax_4d6: Rolls character attributes with 4d6 and removes the lowest die\n' +
-      '/food [list|remove {name}|add {name}|pick]\n' +
-      '/gossip [add {gossip_text}|remove {id}|get {id}|find {word_filters}]\n' +
-      '/roulette [|spin|stats]\n' +
-      '/deck [pick|deal|shuffle]'
-    );
+var help = require("./lib/Help.js")
 
+var Info = function(robot) {
+  robot.respond(/help\s*$/, function (msg) {
+    msg.reply(help.getGlobalHelp());
+  });
+
+  robot.respond(/help\s+(\S+)\s*$/, function (msg) {
+    msg.reply(help.getDetailedHelp(msg.match[1]));
   });
 };
 

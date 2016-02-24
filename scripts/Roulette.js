@@ -1,4 +1,13 @@
 var connectionHelper = require('./lib/ConnectionHelper.js');
+var help = require('./lib/Help.js');
+
+help.setHelpCategory(
+  'roulette',
+  'game of russian roulette',
+  '/roulette - play one round of russian roulette\n' +
+  '/roulette spin - spins the barrel\n' +
+  '/roulette stats - display the game scores'
+);
 
 var Roulette = function (robot) {
   var shot;

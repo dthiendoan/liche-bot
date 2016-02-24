@@ -1,5 +1,15 @@
 var connectionHelper = require('./lib/ConnectionHelper.js');
 var AntiWeasel = require('./lib/AntiWeasel.js');
+var help = require('./lib/Help.js');
+
+help.setHelpCategory(
+  'food',
+  'store and display food places',
+  '/food add <name> - add a food place\n' +
+  '/food remove <name> - remove a food place\n' +
+  '/food pick - pick a random food place\n' +
+  '/food list - list all the saved food places'
+);
 
 var Food = function(robot) {
   var antiWeasel = new AntiWeasel();

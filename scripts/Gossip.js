@@ -1,5 +1,16 @@
 var connectionHelper = require('./lib/ConnectionHelper.js');
 var AntiWeasel = require('./lib/AntiWeasel.js');
+var help = require('./lib/Help.js');
+
+help.setHelpCategory(
+  'gossip',
+  'stores and display gossips',
+  '/gossip - retrieve a random gossip\n' +
+  '/gossip find <search> - retrieve a random gossip containing <search>\n' +
+  '/gossip get <id> - retrieve the gossip with given id\n' +
+  '/gossip add <gossip> - add a new gossip\n' +
+  '/gossip remove <id> - remove the gossip with the given id'
+);
 
 var Gossip = function(robot) {
   var antiWeasel = new AntiWeasel();
