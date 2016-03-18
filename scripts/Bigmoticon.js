@@ -71,18 +71,18 @@ var Bigmoticon = function(robot) {
   }
 
   var listMoticons = function(msg) {
+    var connection = connectionHelper.getConnection();
     connection.query('SELECT tag FROM bigmoticon', function(err, rows) {
       if (err) {
         msg.reply('Something broke');
         return;
       }
 
-      result = '\n';
-      rows.forEach(function (row) {
-        result += '- ' + row.tag + '\n';
+      var tags = rows.map(function (row) {
+        return row.tag;
       });
 
-      msg.reply(result);
+      msg.reply(tags.join(', '));
     });
   }
 
