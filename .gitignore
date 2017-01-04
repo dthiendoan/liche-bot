@@ -1,4 +1,9 @@
 node_modules
 .DS_Store*
 .hubot_history
+bin/
 config/config.js
+external-scripts.json
+package.json
+Procfile
+README.md
