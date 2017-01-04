@@ -1,4 +1,4 @@
-HUBOT_SLACK_TOKEN=''
+export HUBOT_SLACK_TOKEN=''
 
 # Fill this value to the LicheBot root directory
 HOME_DIRECTORY='';
