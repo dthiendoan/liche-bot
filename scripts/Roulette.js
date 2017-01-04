@@ -1,6 +1,7 @@
 var TriggerHelper = require('./lib/TriggerHelper.js');
 var connectionHelper = require('./lib/ConnectionHelper.js');
 var help = require('./lib/Help.js');
+var messageHelper = require('./lib/MessageHelper.js');
 
 help.setHelpCategory(
   'roulette',
@@ -129,7 +130,8 @@ var Roulette = function (robot) {
   }
 
   robot.hear(trigger.getTrigger(), function (msg) {
-    var person = msg.message.user.mention_name
+
+    var person = messageHelper.getPerson(msg);
 
     var result = pullTrigger(person);
     if (result === true) {
