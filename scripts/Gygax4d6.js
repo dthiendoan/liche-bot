@@ -1,10 +1,12 @@
 var Dice = require('./lib/Dice.js');
+var TriggerHelper = require('./lib/TriggerHelper.js');
 var help = require('./lib/Help.js');
 
 help.setHelpCategory('gygax4d6', 'rolls a D&D character', '/gygax_4d6 rolls a D&D character using 4d6 and removing the smallest roll')
 
 var Gygax4d6 = function(robot) {
   var dice = new Dice();
+  var trigger = new TriggerHelper('gygax_4d6');
 
   var roll4d6 = function() {
     var rolls = dice.rollMultiple(4, 6);
@@ -22,7 +24,7 @@ var Gygax4d6 = function(robot) {
     return (modifier > 0) ? '+' + modifier : modifier;
   };
 
-  robot.hear(/^\/gygax_4d6\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger(), function (msg) {
     var rolls = [
       roll4d6(),
       roll4d6(),

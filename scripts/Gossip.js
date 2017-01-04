@@ -1,3 +1,4 @@
+var TriggerHelper = require('./lib/TriggerHelper.js');
 var connectionHelper = require('./lib/ConnectionHelper.js');
 var AntiWeasel = require('./lib/AntiWeasel.js');
 var help = require('./lib/Help.js');
@@ -13,6 +14,7 @@ help.setHelpCategory(
 );
 
 var Gossip = function(robot) {
+  var trigger = new TriggerHelper('gossip');
   var antiWeasel = new AntiWeasel();
 
   var addGossip = function(gossip, msg) {
@@ -80,7 +82,7 @@ var Gossip = function(robot) {
     });
   }
 
-  robot.hear(/^\/gossip\s+add\s+([\s\S]+?)$/, function (msg) {
+  robot.hear(trigger.getTrigger('add', '([\\s\\S]+?)'), function (msg) {
     if (!antiWeasel.check(msg.match[1])) {
       msg.reply('Don\'t be a weasel');
     } else {
@@ -88,19 +90,19 @@ var Gossip = function(robot) {
     }
   });
 
-  robot.hear(/^\/gossip\s+remove\s+(\d+?)\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('remove', '(\\d+?)'), function (msg) {
     deleteGossip(msg.match[1], msg);
   });
 
-  robot.hear(/^\/gossip\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger(), function (msg) {
     findGossip(null, msg);
   });
 
-  robot.hear(/^\/gossip\s+find\s+(.*?)\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('find', '(.*?)'), function (msg) {
     findGossip(msg.match[1], msg);
   });
 
-  robot.hear(/^\/gossip\s+get\s+(.*?)\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('get', '(.*?)'), function (msg) {
     getGossip(msg.match[1], msg);
   });
 }

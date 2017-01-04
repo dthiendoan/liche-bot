@@ -1,3 +1,4 @@
+var TriggerHelper = require('./lib/TriggerHelper.js');
 var connectionHelper = require('./lib/ConnectionHelper.js');
 var AntiWeasel = require('./lib/AntiWeasel.js');
 var help = require('./lib/Help.js');
@@ -12,6 +13,7 @@ help.setHelpCategory(
 );
 
 var Food = function(robot) {
+  var trigger = new TriggerHelper('food');
   var antiWeasel = new AntiWeasel();
 
   var addPlace = function(place_name, msg) {
@@ -71,11 +73,11 @@ var Food = function(robot) {
     });
   }
 
-  robot.hear(/^\/food\s+list\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('list'), function (msg) {
     listPlaces(msg);
   });
 
-  robot.hear(/^\/food\s+add\s+(.+?)\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('add', '(.+?)'), function (msg) {
     if (!antiWeasel.check(msg.match[1])) {
       msg.reply('Don\'t be a weasel');
     } else {
@@ -83,11 +85,11 @@ var Food = function(robot) {
     }
   });
 
-  robot.hear(/^\/food\s+remove\s+(.+?)\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('remove', '(.+?)'), function (msg) {
     deletePlace(msg.match[1], msg);
   });
 
-  robot.hear(/^\/food\s+pick\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('pick'), function (msg) {
     pickPlace(msg);
   });
 }

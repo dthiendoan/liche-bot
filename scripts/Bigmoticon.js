@@ -1,6 +1,7 @@
 var request = require('request');
 var q = require('q');
 
+var TriggerHelper = require('./lib/TriggerHelper.js');
 var connectionHelper = require('./lib/ConnectionHelper.js');
 var AntiWeasel = require('./lib/AntiWeasel.js');
 var help = require('./lib/Help.js');
@@ -16,6 +17,7 @@ help.setHelpCategory(
 )
 
 var Bigmoticon = function(robot) {
+  var trigger = new TriggerHelper('bigmoticon');
   var antiWeasel = new AntiWeasel();
   var connection = connectionHelper.getConnection();
 
@@ -73,7 +75,7 @@ var Bigmoticon = function(robot) {
   var listMoticons = function(msg) {
     var connection = connectionHelper.getConnection();
     connection.query('SELECT tag FROM bigmoticon', function(err, rows) {
-      if (err) {
+      if (err) {console.log(err);
         msg.reply('Something broke');
         return;
       }
@@ -120,7 +122,7 @@ var Bigmoticon = function(robot) {
     getMoticon(msg.match[1], msg);
   });
 
-  robot.hear(/^\/bigmoticon\s+add\s+(\w+)\s+(.+?)\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('add', '(\\w+)\\s+(.+?)'), function (msg) {
     var tag = msg.match[1];
     var img = msg.match[2];
 
@@ -132,11 +134,11 @@ var Bigmoticon = function(robot) {
     addMoticon(tag, img, msg);
   });
 
-  robot.hear(/^\/bigmoticon\s+remove\s+(\w+)\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('remove', '(\\w+)'), function (msg) {
     deleteMoticon(msg.match[1], msg);
   });
 
-  robot.hear(/^\/bigmoticon\s+list\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('list'), function (msg) {
     listMoticons(msg);
   });
 };

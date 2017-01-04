@@ -1,4 +1,5 @@
 var Dice = require('./lib/Dice.js');
+var TriggerHelper = require('./lib/TriggerHelper.js');
 var AntiWeasel = require('./lib/AntiWeasel.js');
 var help = require('./lib/Help.js');
 
@@ -6,6 +7,7 @@ help.setHelpCategory('dice', 'roll one or multiple dice', '/dice XdY rolls X dic
 
 var SimpleDiceRoller = function(robot) {
   var dice = new Dice();
+  var trigger = new TriggerHelper('dice');
   var antiWeasel = new AntiWeasel();
 
   var checkParameters = function (nRolls, nFaces) {
@@ -17,7 +19,7 @@ var SimpleDiceRoller = function(robot) {
     );
   };
 
-  robot.hear(/^\/dice\s+(\d+)[dD](\d+)([\+-]\d+)?(\s+.*)?$/, function (msg) {
+  robot.hear(trigger.getTrigger('', '(\\d+)[dD](\\d+)([\\+-]\\d+)?(\\s+.*)?'), function (msg) {
     var nRolls = parseInt(msg.match[1]);
     var nFaces = parseInt(msg.match[2]);
     var constant = msg.match[3] !== undefined ? parseInt(msg.match[3]) : 0;

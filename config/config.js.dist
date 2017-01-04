@@ -1,4 +1,5 @@
 var Config = function() {
+  this.trigger = '';
   this.mysql = {
     'host': '',
     'user': '',
@@ -7,4 +8,4 @@ var Config = function() {
   };
 }
 
-module.exports = Config
+module.exports = new Config();

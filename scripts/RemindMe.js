@@ -1,9 +1,11 @@
+var TriggerHelper = require('./lib/TriggerHelper.js');
 var AntiWeasel = require('./lib/AntiWeasel.js');
 var help = require('./lib/Help.js');
 
 help.setHelpCategory('remind me', 'sets a reminder', '/remind me <something> in <time> will set a reminder. time will accept minutes, hours or days (e.g. 4 days)');
 
 var RemindMe = function (robot) {
+  var trigger = new TriggerHelper('remind me');
   var antiWeasel = new AntiWeasel();
   var timeoutMap;
 
@@ -37,7 +39,7 @@ var RemindMe = function (robot) {
   }
 
 
-  robot.hear(/^\/remind me\s+(.+?)\s+in\s+(\d+)\s*([a-zA-Z]+)\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('', '(.+?)\\s+in\\s+(\\d+)\\s*([a-zA-Z]+)'), function (msg) {
     try {
       var message = msg.match[1];
       var duration = decodeDuration(parseInt(msg.match[2]), msg.match[3]);    

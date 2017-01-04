@@ -1,10 +1,12 @@
 var Dice = require('./lib/Dice.js');
+var TriggerHelper = require('./lib/TriggerHelper.js');
 var help = require('./lib/Help.js');
 
 help.setHelpCategory('gygax', 'rolls a D&D character attributes', '/gygax rolls a D&D character with 3d6 score attributes');
 
 var Gygax = function(robot) {
   var dice = new Dice();
+  var trigger = new TriggerHelper('gygax');
   
   var displayModifier = function(value) {
     var modifier = Math.floor((value - 10) / 2);
@@ -12,7 +14,7 @@ var Gygax = function(robot) {
     return (modifier > 0) ? '+' + modifier : modifier;
   };
 
-  robot.hear(/^\/gygax\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger(), function (msg) {
     var rolls = [
       dice.sumRoll(dice.rollMultiple(3, 6)),
       dice.sumRoll(dice.rollMultiple(3, 6)),

@@ -1,3 +1,4 @@
+var TriggerHelper = require('./lib/TriggerHelper.js');
 var connectionHelper = require('./lib/ConnectionHelper.js');
 var help = require('./lib/Help.js');
 
@@ -10,6 +11,7 @@ help.setHelpCategory(
 );
 
 var Roulette = function (robot) {
+  var trigger = new TriggerHelper('roulette');
   var shot;
   var lastPerson;
 
@@ -126,7 +128,7 @@ var Roulette = function (robot) {
     msg.emote(' - *BANG* - ' + messages[Math.floor(Math.random() * messages.length)].replace('%name%', msg.message.user.name));
   }
 
-  robot.hear(/^\/roulette\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger(), function (msg) {
     var person = msg.message.user.mention_name
 
     var result = pullTrigger(person);
@@ -141,12 +143,12 @@ var Roulette = function (robot) {
     }
   });
 
-  robot.hear(/^\/roulette\s+spin\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('spin'), function (msg) {
     spinBarrel();
     msg.emote(' - *spins*');
   });
 
-  robot.hear(/^\/roulette\s+stats\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('stats'), function (msg) {
     getStats(msg);
   });
 };

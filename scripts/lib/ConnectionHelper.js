@@ -5,8 +5,7 @@ var ConnectionHelper = function() {
   var connection;
 
   var init = function() {
-    var config = new Config();
-    connection = Mysql.createConnection(config.mysql);
+    connection = Mysql.createConnection(Config.mysql);
   }
 
   this.getConnection = function() {

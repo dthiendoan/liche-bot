@@ -1,4 +1,5 @@
 var many_things = require('../data/many_things.json');
+var TriggerHelper = require('./lib/TriggerHelper.js');
 var help = require('./lib/Help.js');
 
 help.setHelpCategory(
@@ -11,6 +12,8 @@ help.setHelpCategory(
 );
 
 var Deck = function (robot) {
+  var trigger = new TriggerHelper('deck');
+
   var deck;
 
   // Using Knuth shuffle
@@ -120,18 +123,18 @@ var Deck = function (robot) {
 
   dealDeck();
 
-  robot.hear(/^\/deck\s+deal\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('deal'), function (msg) {
     dealDeck();
     msg.emote(' - shuffles all the cards back');
   });
 
 
-  robot.hear(/^\/deck\s+shuffle\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('shuffle'), function (msg) {
     shuffleDeck();
     msg.emote(' *shuffle* *shuffle*');
   });
 
-  robot.hear(/^\/deck\s+pick\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('pick'), function (msg) {
     var card = pickCard();
     if (card == undefined) {
       dealDeck();
@@ -142,7 +145,7 @@ var Deck = function (robot) {
     msg.reply(getCardName(card));
   });
 
-  robot.hear(/^\/deck\s+manythings\s*$/, function (msg) {
+  robot.hear(trigger.getTrigger('manythings'), function (msg) {
     var card = pickCard();
     if (card == undefined) {
       dealDeck();
@@ -153,8 +156,6 @@ var Deck = function (robot) {
     var manyThingsCard = many_things[card.number][card.color];
     msg.reply(getCardName(card) + " - " + manyThingsCard.title + " - " + manyThingsCard.description);
   });
-
-
 }
 
 module.exports = Deck;
