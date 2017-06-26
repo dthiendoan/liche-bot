@@ -40,28 +40,42 @@ var Gossip = function(robot) {
     });
   }
 
-  var findGossip = function(text, msg) {
+  var findGossip = function(text, msg, limiter) {
     var connection = connectionHelper.getConnection();
     var query = 'SELECT * FROM gossip';
     var queryArgs = [];
+    var gossip = '\n';
 
     if (text != null && text.length > 0) {
       query += ' WHERE gossip_text LIKE ?';
       queryArgs.push('%' + text + '%');
     }
 
-    query += ' ORDER BY RAND() LIMIT 0,1';
+    query += ' ORDER BY RAND() LIMIT ' + (limiter || 1);
 
     connection.query(query, queryArgs, function(err, rows) {
       if (err) {
         msg.reply('Something broke');
       }
 
-      if (rows.length === 0) {
+      if (rows.length === 0 && !limiter) {
         msg.reply('No gossip found.');
         return;
       }
-      msg.reply('[id:' + rows[0].id + ']\n' + rows[0].gossip_text);
+      
+      for (var index = 0; index < rows.length; index++) {
+        gossip += rows[index].gossip_text + '\n';
+      }
+
+      if (rows.length < limiter) {
+        var counter = 0;
+        while (counter < (limiter - rows.length)) {
+          gossip += 'Refrigerator\n';
+          counter++;
+        }
+      }
+
+      limiter > 0 ? msg.reply(gossip) : msg.reply('[id:' + rows[0].id + ']\n' + rows[0].gossip_text);
     });
   }
 
@@ -104,6 +118,10 @@ var Gossip = function(robot) {
 
   robot.hear(trigger.getTrigger('get', '(.*?)'), function (msg) {
     getGossip(msg.match[1], msg);
+  });
+
+  robot.hear(trigger.getTrigger('haiku'), function (msg) {
+    findGossip(null, msg, 3);
   });
 }
 
