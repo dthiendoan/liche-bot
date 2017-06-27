@@ -40,42 +40,57 @@ var Gossip = function(robot) {
     });
   }
 
-  var findGossip = function(text, msg, limiter) {
+  var findGossip = function(text, msg, max_rows = 0) {
+
+    const LINE_DELIMITER = '\n';
     var connection = connectionHelper.getConnection();
-    var query = 'SELECT * FROM gossip';
+    var filler = [ 'Why are you haiku?',
+                   'Purple fried water okay',
+                   'Refrigerator' ];
+    var query = 'SELECT * FROM gossip ';
     var queryArgs = [];
-    var gossip = '\n';
+    var where_clause = 'WHERE gossip_text LIKE ? ';
+    var order_clause = 'ORDER BY RAND() ';
+    var limit_clause = 'LIMIT ' + (max_rows || 1);
+    var gossip = LINE_DELIMITER;
 
     if (text != null && text.length > 0) {
-      query += ' WHERE gossip_text LIKE ?';
+      query += where_clause;
       queryArgs.push('%' + text + '%');
     }
 
-    query += ' ORDER BY RAND() LIMIT ' + (limiter || 1);
+    query = query + order_clause + limit_clause;
 
     connection.query(query, queryArgs, function(err, rows) {
       if (err) {
         msg.reply('Something broke');
       }
 
-      if (rows.length === 0 && !limiter) {
+      if (rows.length === 0 && max_rows === 0) {
         msg.reply('No gossip found.');
         return;
       }
       
       for (var index = 0; index < rows.length; index++) {
-        gossip += rows[index].gossip_text + '\n';
+        gossip += rows[index].gossip_text + LINE_DELIMITER;
       }
 
-      if (rows.length < limiter) {
-        var counter = 0;
-        while (counter < (limiter - rows.length)) {
-          gossip += 'Refrigerator\n';
-          counter++;
-        }
+      switch (rows.length) {
+        case 0:
+          gossip = LINE_DELIMITER + filler[0] + LINE_DELIMITER + filler[1] + LINE_DELIMITER + filler[2] + LINE_DELIMITER;
+          break;
+        case 1:
+          gossip = LINE_DELIMITER + filler[0] + gossip + filler[2] + LINE_DELIMITER;
+          break;
+        case 2:
+          gossip = gossip + filler[2] + LINE_DELIMITER;
+          break;
+        default:
+          break; 
       }
 
-      limiter > 0 ? msg.reply(gossip) : msg.reply('[id:' + rows[0].id + ']\n' + rows[0].gossip_text);
+      var output = max_rows > 0 ? gossip : '[id:' + rows[0].id + ']' + LINE_DELIMITER + rows[0].gossip_text;
+      msg.reply(output);
     });
   }
 
