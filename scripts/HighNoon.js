@@ -104,6 +104,7 @@ var Highnoon = function (robot) {
             msg.reply(person + ' has misfired! Player two wins!');
           }
           sessionStore[channelId].shotsFired = true;
+          removeSession(msg, channelId);
         } else if (sessionStore[channelId].secondPlayer === person && !sessionStore[channelId].shotsFired) {
           if (sessionStore[channelId].timeToDraw) {
             msg.reply(person + ' shot first! Player two wins!');
@@ -111,8 +112,10 @@ var Highnoon = function (robot) {
             msg.reply(person + ' has misfired! Player one wins!');
           }
           sessionStore[channelId].shotsFired = true;
+          removeSession(msg, channelId);
+        } else {
+          msg.reply('HEY! You\'re not part of this duel! Take a seat son and wait for your turn!');
         }
-        removeSession(msg, channelId);
       } else {
         msg.reply('Please wait for a second player to enter the game first before shooting!');
       }
