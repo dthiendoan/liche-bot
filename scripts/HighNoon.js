@@ -69,7 +69,7 @@ var Highnoon = function (robot) {
       return this.maxPlayers;
     }
 
-    getCountDownValue() {
+    getCountdownValue() {
       return this.countdownValue;
     }
 
