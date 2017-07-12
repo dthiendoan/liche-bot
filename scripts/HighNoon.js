@@ -82,7 +82,7 @@ var Highnoon = function (robot) {
     }
 
     timeToDraw() {
-      return this.elapsed >= this.countDownValue;
+      return this.elapsed >= this.countdownValue;
     }
 
     duelIsDone() {
