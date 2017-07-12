@@ -92,7 +92,7 @@ var Highnoon = function (robot) {
   };
 
   class Session {
-    constructor(channelId, person, maxPlayers) {
+    constructor(channelId, maxPlayers) {
       this.channelId = channelId;
       this.gameState = new GameState(maxPlayers);
     }
@@ -145,7 +145,8 @@ var Highnoon = function (robot) {
     if (sessionStore[channelId]) {
       return sessionStore[channelId].addPlayer(person);
     } else {
-      sessionStore[channelId] = new Session(channelId, person, maxPlayers);
+      sessionStore[channelId] = new Session(channelId, maxPlayers);
+      sessionStore[channelId].addPlayer(person);
       return SESSION_CREATED;
     }
   };
