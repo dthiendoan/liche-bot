@@ -3,7 +3,7 @@ var connectionHelper = require('./lib/ConnectionHelper.js');
 var help = require('./lib/Help.js');
 var messageHelper = require('./lib/MessageHelper.js');
 
-var UserInterface = require('./lib/UserInterface.js');
+var UserInterface = require('./lib/highnoon/UserInterface.js');
 var GameEngine = require('./lib/highnoon/GameEngine.js');
 
 help.setHelpCategory(
