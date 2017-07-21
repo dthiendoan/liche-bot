@@ -1,4 +1,4 @@
-  export class PlayerState {
+class PlayerState {
     constructor(name) {
       this.name = name;
       this.alive = true;
@@ -16,3 +16,5 @@
       this.alive = false;
     }
   };
+
+  module.exports = PlayerState;

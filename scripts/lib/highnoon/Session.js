@@ -1,4 +1,4 @@
-export class Session {
+class Session {
   constructor(channelId, maxPlayers) {
     this.channelId = channelId;
     this.players = {};
@@ -33,3 +33,5 @@ export class Session {
     return this.elapsed >= this.countdownValue;
   }
 };
+
+module.exports = Session;

@@ -1,8 +1,15 @@
-import { SESSION_CREATED, SESSION_FULL, SESSION_REMOVED, SESSION_DOES_NOT_EXIST, PLAYER_ADDED, PLAYER_ALREADY_IN_SESSION, PLAYER_REMOVED, PLAYER_DOES_NOT_EXIST } from 'lib/States';
-import Session from 'Session';
-import PlayerState from 'PlayerState';
+var SESSION_CREATED = require('./lib/States.js').SESSION_CREATED;
+var SESSION_FULL = require('./lib/States.js').SESSION_FULL;
+var SESSION_REMOVED = require('./lib/States.js').SESSION_REMOVED;
+var SESSION_DOES_NOT_EXIST = require('./lib/States.js').SESSION_DOES_NOT_EXIST;
+var PLAYER_ADDED = require('./lib/States.js').PLAYER_ADDED;
+var PLAYER_ALREADY_IN_SESSION = require('./lib/States.js').PLAYER_ALREADY_IN_SESSION;
+var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
+var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
+var Session = require('./Session.js');
+var PlayerState = require('./PlayerState.js');
 
-export class UserInterface {
+class UserInterface {
   createSession(session, channelId, person, maxPlayers = 2) {
     var sessionExists = Boolean(session);
     if (sessionExists) {
@@ -51,3 +58,5 @@ export class UserInterface {
     }
   }
 };
+
+module.exports = UserInterface;
