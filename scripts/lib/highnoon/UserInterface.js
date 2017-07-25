@@ -7,34 +7,35 @@ var PLAYER_ALREADY_IN_SESSION = require('./lib/States.js').PLAYER_ALREADY_IN_SES
 var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
 var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
 var Session = require('./Session.js');
+var SessionStore = require('./SessionStore.js');
 var PlayerState = require('./PlayerState.js');
 
 class UserInterface {
-  createSession(session, channelId, person, maxPlayers = 2) {
-    var sessionExists = Boolean(session);
+  createSession(channelId, person, maxPlayers = 2) {
+    var sessionExists = Boolean(SessionStore[channelId]);
     if (sessionExists) {
-      return session.addPlayer(person);
+      return SessionStore[channelId].addPlayer(person);
     } else {
-      session = new Session(channelId, maxPlayers);
-      session.addPlayer(person);
+      SessionStore[channelId] = new Session(channelId, maxPlayers);
+      SessionStore[channelId].addPlayer(person);
       return SESSION_CREATED;
     }
   }
 
-  removeSession(session, msg) {
-    var existed = Boolean(session); // check if it exists first prior to deletion
+  removeSession(msg, channelId) {
+    var existed = Boolean(SessionStore[channelId]); // check if it exists first prior to deletion
     if (!existed) {
       return SESSION_DOES_NOT_EXIST;
     } else {
-      delete session;
+      delete SessionStore[channelId];
       return SESSION_REMOVED;
     }
   }
 
-  addPlayer(session, person) {
-    if (!session.sessionIsFull()) {
-      if (session.players[person] === undefined) {
-        session.players[person] = new PlayerState(person);
+  addPlayer(channelId, person) {
+    if (!SessionStore[channelId].sessionIsFull()) {
+      if (SessionStore[channelId].players[person] === undefined) {
+        SessionStore[channelId].players[person] = new PlayerState(person);
         return PLAYER_ADDED;
       } else {
         return PLAYER_ALREADY_IN_SESSION;
@@ -44,11 +45,11 @@ class UserInterface {
     }
   }
 
-  removePlayer(session, person) {
-    var sessionExists = Boolean(session);
+  removePlayer(channelId, person) {
+    var sessionExists = Boolean(SessionStore[channelId]);
     if (sessionExists) {
-      if (session.players[person] !== undefined) {
-        delete session.players[person];
+      if (SessionStore[channelId].players[person] !== undefined) {
+        delete SessionStore[channelId].players[person];
         return PLAYER_REMOVED;
       } else {
         return PLAYER_DOES_NOT_EXIST;
