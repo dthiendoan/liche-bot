@@ -11,27 +11,6 @@ var SessionStore = require('./SessionStore.js');
 var PlayerState = require('./PlayerState.js');
 
 class UserInterface {
-  createSession(channelId, person, maxPlayers = 2) {
-    var sessionExists = Boolean(SessionStore[channelId]);
-    if (sessionExists) {
-      return SessionStore[channelId].addPlayer(person);
-    } else {
-      SessionStore[channelId] = new Session(channelId, maxPlayers);
-      SessionStore[channelId].addPlayer(person);
-      return SESSION_CREATED;
-    }
-  }
-
-  removeSession(msg, channelId) {
-    var existed = Boolean(SessionStore[channelId]); // check if it exists first prior to deletion
-    if (!existed) {
-      return SESSION_DOES_NOT_EXIST;
-    } else {
-      delete SessionStore[channelId];
-      return SESSION_REMOVED;
-    }
-  }
-
   addPlayer(channelId, person) {
     if (!SessionStore[channelId].sessionIsFull()) {
       if (SessionStore[channelId].players[person] === undefined) {
@@ -56,6 +35,27 @@ class UserInterface {
       }
     } else {
       return SESSION_DOES_NOT_EXIST;
+    }
+  }
+
+  createSession(channelId, person, maxPlayers = 2) {
+    var sessionExists = Boolean(SessionStore[channelId]);
+    if (sessionExists) {
+      return SessionStore[channelId].addPlayer(person);
+    } else {
+      SessionStore[channelId] = new Session(channelId, maxPlayers);
+      addPlayer(channelId, person);
+      return SESSION_CREATED;
+    }
+  }
+
+  removeSession(msg, channelId) {
+    var existed = Boolean(SessionStore[channelId]); // check if it exists first prior to deletion
+    if (!existed) {
+      return SESSION_DOES_NOT_EXIST;
+    } else {
+      delete SessionStore[channelId];
+      return SESSION_REMOVED;
     }
   }
 };
