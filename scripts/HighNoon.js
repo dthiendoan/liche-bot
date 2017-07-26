@@ -27,7 +27,7 @@ function Highnoon (robot) {
   robot.hear(trigger.getTrigger(), function (msg) {
     var person = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
-    var result = SI.createSession(channelId, person);
+    var result = SI.createSession(channelId, person, 2);
     GE.checkSession(msg, result, channelId, person);
   });
 
