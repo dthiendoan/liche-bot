@@ -2,7 +2,7 @@ class Session {
   constructor(channelId, maxPlayers) {
     this.channelId = channelId;
     this.players = {};
-    this.maxPlayers = maxPlayers;
+    this.maxPlayers = Number(maxPlayers);
     this.allShotsFired = false;
     this.countdownValue = Math.floor(Math.random() * 2500) + 2500; // Guarantees to never be zero
     this.timer = null;
