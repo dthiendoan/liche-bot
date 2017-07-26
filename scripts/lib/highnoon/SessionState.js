@@ -4,7 +4,7 @@ class Session {
     this.players = {};
     this.maxPlayers = Number(maxPlayers);
     this.allShotsFired = false;
-    this.countdownValue = Math.floor(Math.random() * 2500) + 2500; // Guarantees to never be zero
+    this.countdownValue = Math.floor(Math.random() * 7500) + 2500; // Guarantees to never be zero
     this.timer = null;
     this.elapsed = 0;
   }
