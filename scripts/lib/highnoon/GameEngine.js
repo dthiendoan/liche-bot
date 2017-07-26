@@ -112,7 +112,7 @@ class GameEngine {
     var sessionExists = Boolean(session);
     if (sessionExists) {
       session.elapsed = session.countdownValue;
-      if (session.timeToDraw()) {
+      if (session.isTimeToDraw()) {
         msg.reply('Session ready state has been set to true. Players may now proceed to shoot.');
       } else {
         msg.reply('Uh oh! Session\'s ready state cannot be set to true. Please check the code.');
