@@ -66,6 +66,11 @@ function Highnoon (robot) {
     var channelId = messageHelper.getChannelId(msg);
     GE.checkTime(msg, SessionStore[channelId], channelId);
   });
+
+  robot.hear(trigger.getTrigger('debug'), function (msg) {
+    var channelId = messageHelper.getChannelId(msg);
+    msg.reply('SESSION INFORMATION:\n', JSON.stringify(SessionStore[channelId]));
+  });
 };
 
 module.exports = Highnoon;
