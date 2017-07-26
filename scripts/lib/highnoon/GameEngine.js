@@ -78,7 +78,7 @@ class GameEngine {
       // check if the session already has all the players
       if (session.sessionIsFull()) {
         // check if the person is one of the players and if the duel is ongoing
-        if (session.players[shooter].getName() === shooter && !session.allShotsFired) {
+        if (session.players[shooter] !== undefined && session.players[shooter].getName() === shooter && !session.allShotsFired) {
           // check if it is time to draw
           if (session.isTimeToDraw()) {
             msg.reply(shooter + ' shot first! Everyone else falls dead. ' + shooter + ' wins!');
