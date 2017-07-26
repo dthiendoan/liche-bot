@@ -81,7 +81,8 @@ class GameEngine {
               }
             }
             duelIsDone(session);
-            SI.removeSession(msg, channelId);
+            var result = SI.removeSession(msg, channelId);
+            checkSession(msg, result, channelId);
           } else {
             msg.reply(shooter + ' misfired! ' + shooter + ' is DEAD and out of the duel!');
             session.players[shooter].gotShot();
