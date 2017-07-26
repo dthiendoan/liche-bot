@@ -8,7 +8,7 @@ var PlayerInterface = require('./PlayerInterface.js');
 var PI = new PlayerInterface();
 
 class SessionInterface {
-  createSession(channelId, person, maxPlayers) {
+  createSession(channelId, person, maxPlayers = 2) {
     var sessionExists = Boolean(SessionStore[channelId]);
     if (sessionExists) {
       return PI.addPlayer(channelId, person);

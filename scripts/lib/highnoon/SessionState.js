@@ -10,7 +10,7 @@ class Session {
   }
 
   playersNeeded() {
-    return this.maxPlayers - this.players.length;
+    return this.maxPlayers - Object.keys(this.players).length;
   }
 
   getCurrentPlayers() {
