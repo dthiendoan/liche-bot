@@ -1,6 +1,7 @@
 var SESSION_FULL = require('./lib/States.js').SESSION_FULL;
 var SESSION_DOES_NOT_EXIST = require('./lib/States.js').SESSION_DOES_NOT_EXIST;
 var PLAYER_ADDED = require('./lib/States.js').PLAYER_ADDED;
+var ALL_PLAYER_SLOTS_FILLED = require('./lib/States.js').ALL_PLAYER_SLOTS_FILLED;
 var PLAYER_ALREADY_IN_SESSION = require('./lib/States.js').PLAYER_ALREADY_IN_SESSION;
 var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
 var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
@@ -13,7 +14,7 @@ class PlayerInterface {
     if (!SessionStore[channelId].sessionIsFull()) {
       if (SessionStore[channelId].players[person] === undefined) {
         SessionStore[channelId].players[person] = new Player(person);
-        return PLAYER_ADDED;
+        return SessionStore[channelId].sessionIsFull() ? ALL_PLAYER_SLOTS_FILLED : PLAYER_ADDED;
       } else {
         return PLAYER_ALREADY_IN_SESSION;
       }

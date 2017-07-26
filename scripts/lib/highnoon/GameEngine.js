@@ -4,27 +4,30 @@ var SESSION_REMOVED = require('./lib/States.js').SESSION_REMOVED;
 var SESSION_DOES_NOT_EXIST = require('./lib/States.js').SESSION_DOES_NOT_EXIST;
 var PLAYER_ADDED = require('./lib/States.js').PLAYER_ADDED;
 var PLAYER_ALREADY_IN_SESSION = require('./lib/States.js').PLAYER_ALREADY_IN_SESSION;
+var ALL_PLAYER_SLOTS_FILLED = require('./lib/States.js').ALL_PLAYER_SLOTS_FILLED;
 var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
 var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
 
 var SessionInterface = require('./SessionInterface.js');
 var SI = new SessionInterface();
 
+var SessionStore = require('./SessionStore.js');
+
 class GameEngine {
   /////////// SETTER METHODS ////////////
 
-  incrementTimer(msg, session) {
+  changeTimer(msg, session) {
     msg.reply('...');
     session.elapsed += 2500;
+    if (session.elapsed >= session.countdownValue) {
+      msg.reply('DRAW!');
+      clearInterval(session.timer);
+    }
   }
 
   startTimer(msg, session) {
-    session.timer = setInterval(function() { incrementTimer(msg); }, session.countdownValue);
-  }
-
-  endTimer(msg, session) {
-    msg.reply('DRAW!');
-    clearInterval(session.timer);
+    var self = this;
+    session.timer = setInterval(function() { self.changeTimer(msg, session) }, session.countdownValue);
   }
 
   /////////// CHECKS METHODS ////////////
@@ -45,6 +48,10 @@ class GameEngine {
         break;
       case PLAYER_ADDED:
         msg.reply('Another player ' + person + ' added to session in room ' + channelId);
+        break;
+      case ALL_PLAYER_SLOTS_FILLED:
+        msg.reply('All player slots filled. It\'s hiiiiigh noon...');
+        this.startTimer(msg, SessionStore[channelId]);
         break;
       case PLAYER_REMOVED:
         msg.reply('Player ' + person + ' has been removed from session ' + channelId);
