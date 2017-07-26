@@ -1,7 +1,7 @@
 var SESSION_CREATED = require('./lib/States.js').SESSION_CREATED;
 var SESSION_REMOVED = require('./lib/States.js').SESSION_REMOVED;
 var SESSION_DOES_NOT_EXIST = require('./lib/States.js').SESSION_DOES_NOT_EXIST;
-var INVALID_NUMBER_OF_PLAYERS = require('./lib/State.js').INVALID_NUMBER_OF_PLAYERS;
+var INVALID_NUMBER_OF_PLAYERS = require('./lib/States.js').INVALID_NUMBER_OF_PLAYERS;
 
 var Session = require('./SessionState.js');
 var SessionStore = require('./SessionStore.js');
