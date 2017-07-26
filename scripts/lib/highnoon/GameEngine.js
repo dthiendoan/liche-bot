@@ -9,7 +9,6 @@ var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
 
 var SessionInterface = require('./SessionInterface.js');
 var SI = new SessionInterface();
-var removeSession = SI.removeSession;
 
 class GameEngine {
   /////////// SETTER METHODS ////////////
@@ -82,7 +81,7 @@ class GameEngine {
               }
             }
             duelIsDone(session);
-            removeSession(msg, channelId);
+            SI.removeSession(msg, channelId);
           } else {
             msg.reply(shooter + ' misfired! ' + shooter + ' is DEAD and out of the duel!');
             session.players[shooter].gotShot();

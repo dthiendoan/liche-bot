@@ -4,7 +4,8 @@ var SESSION_DOES_NOT_EXIST = require('./lib/States.js').SESSION_DOES_NOT_EXIST;
 
 var Session = require('./SessionState.js');
 var SessionStore = require('./SessionStore.js');
-var PI = require('./PlayerInterface.js');
+var PlayerInterface = require('./PlayerInterface.js');
+var PI = new PlayerInterface();
 
 class SessionInterface {
   createSession(channelId, person, maxPlayers = 2) {
