@@ -26,7 +26,7 @@ class Session {
   }
 
   sessionIsFull() {
-    return this.players.length === this.maxPlayers;
+    return Object.keys(this.players).length === this.maxPlayers;
   }
 
   isTimeToDraw() {
