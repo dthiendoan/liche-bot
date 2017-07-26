@@ -5,6 +5,7 @@ var SESSION_DOES_NOT_EXIST = require('./lib/States.js').SESSION_DOES_NOT_EXIST;
 var PLAYER_ADDED = require('./lib/States.js').PLAYER_ADDED;
 var PLAYER_ALREADY_IN_SESSION = require('./lib/States.js').PLAYER_ALREADY_IN_SESSION;
 var ALL_PLAYER_SLOTS_FILLED = require('./lib/States.js').ALL_PLAYER_SLOTS_FILLED;
+var INVALID_NUMBER_OF_PLAYERS = require('./lib/States.js').INVALID_NUMBER_OF_PLAYERS;
 var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
 var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
 
@@ -38,7 +39,7 @@ class GameEngine {
         msg.reply('New session created in room ' + channelId + ', ' + person + ' designated as first player');
         break;
       case SESSION_FULL:
-        msg.reply('Session is already full! Please wait until the current session is finished ' + person + '.');
+        msg.reply('Session is already full! Please wait until the current session is finished, ' + person + '.');
         break;
       case SESSION_REMOVED:
         msg.reply('Session successfully removed from room ' + channelId);
@@ -47,11 +48,14 @@ class GameEngine {
         msg.reply('There was not a session made yet!  Please type &highnoon to start a session.');
         break;
       case PLAYER_ADDED:
-        msg.reply('Another player ' + person + ' added to session in room ' + channelId);
+        msg.reply('Another player, ' + person + ', added to session in room ' + channelId);
         break;
       case ALL_PLAYER_SLOTS_FILLED:
         msg.reply('All player slots filled. It\'s hiiiiigh noon...');
         this.startTimer(msg, SessionStore[channelId]);
+        break;
+      case INVALID_NUMBER_OF_PLAYERS:
+        msg.reply('Sorry! The number of players you\'ve chosen is invalid. Please try a number between 2 and 10.');
         break;
       case PLAYER_REMOVED:
         msg.reply('Player ' + person + ' has been removed from session ' + channelId);
