@@ -27,10 +27,6 @@ class GameEngine {
     clearInterval(session.timer);
   }
 
-  duelIsDone(session) {
-    session.allShotsFired = true;
-  }
-
   /////////// CHECKS METHODS ////////////
 
   checkSession(msg, result, channelId, person) {
@@ -80,7 +76,7 @@ class GameEngine {
                 session.players[player].gotShot();
               }
             }
-            duelIsDone(session);
+            session.duelIsDone();
             var result = SI.removeSession(msg, channelId);
             checkSession(msg, result, channelId);
           } else {

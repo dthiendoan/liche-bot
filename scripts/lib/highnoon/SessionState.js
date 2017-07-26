@@ -32,6 +32,10 @@ class Session {
   isTimeToDraw() {
     return this.elapsed >= this.countdownValue;
   }
+
+  duelIsDone() {
+    this.allShotsFired = true;
+  }
 };
 
 module.exports = Session;
