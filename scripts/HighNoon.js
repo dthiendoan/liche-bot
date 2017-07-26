@@ -69,10 +69,10 @@ function Highnoon (robot) {
 
   robot.hear(trigger.getTrigger('debug'), function (msg) {
     var channelId = messageHelper.getChannelId(msg);
-    msg.reply('CURRENT SESSION INFORMATION:\n', JSON.stringify(SessionStore[channelId]));
-    msg.reply('\n\nIS SESSION FULL?', SessionStore[channelId].sessionIsFull());
-    msg.reply('\n\nWHAT IS CURRENT NUMBER OF PLAYERS?', Object.keys(SessionStore[channelId].players).length);
-    msg.reply('\n\nWHAT IS MAX PLAYERS?', SessionStore[channelId].getMaxPlayers());
+    msg.reply('CURRENT SESSION INFORMATION:\n' + JSON.stringify(SessionStore[channelId]));
+    msg.reply('\n\nIS SESSION FULL?' + SessionStore[channelId].sessionIsFull());
+    msg.reply('\n\nWHAT IS CURRENT NUMBER OF PLAYERS?' + Object.keys(SessionStore[channelId].players).length);
+    msg.reply('\n\nWHAT IS MAX PLAYERS?' + SessionStore[channelId].getMaxPlayers());
   });
 };
 
