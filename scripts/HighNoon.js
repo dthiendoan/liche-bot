@@ -58,7 +58,8 @@ function Highnoon (robot) {
 
   robot.hear(trigger.getTrigger('cancel'), function (msg) {
     var channelId = messageHelper.getChannelId(msg);
-    SI.removeSession(msg, channelId);
+    var result = SI.removeSession(msg, channelId);
+    GE.checkSession(msg, result, channelId);
   });
 
   robot.hear(trigger.getTrigger('time'), function (msg) {
