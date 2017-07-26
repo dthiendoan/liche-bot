@@ -3,7 +3,8 @@ var connectionHelper = require('./lib/ConnectionHelper.js');
 var help = require('./lib/Help.js');
 var messageHelper = require('./lib/MessageHelper.js');
 
-var UserInterface = require('./lib/highnoon/UserInterface.js');
+var SessionInterface = require('./lib/highnoon/SessionInterface.js');
+var PlayerInterface = require('./lib/highnoon/PlayerInterface.js');
 var SessionStore = require('./lib/highnoon/SessionStore.js');
 var GameEngine = require('./lib/highnoon/GameEngine.js');
 
@@ -19,28 +20,29 @@ help.setHelpCategory(
 
 function Highnoon (robot) {
   var trigger = new TriggerHelper('highnoon');
-  var UI = new UserInterface();
+  var SI = new SessionInterface();
+  var PI = new PlayerInterface();
   var GE = new GameEngine();
 
   robot.hear(trigger.getTrigger(), function (msg) {
     var person = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
-    var result = UI.createSession(SessionStore[channelId], channelId, person);
-    UI.checkSession(msg, result, channelId, person);
+    var result = SI.createSession(SessionStore[channelId], channelId, person);
+    GE.checkSession(msg, result, channelId, person);
   });
 
   robot.hear(trigger.getTrigger('(\\d+?)'), function (msg) {
     var person = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
-    var result = UI.createSession(SessionStore[channelId], channelId, person, msg.match[1]);
-    UI.checkSession(msg, result, channelId, person);
+    var result = SI.createSession(SessionStore[channelId], channelId, person, msg.match[1]);
+    GE.checkSession(msg, result, channelId, person);
   });
 
   robot.hear(trigger.getTrigger('removePlayer', '([\\s\\S]+?)'), function (msg) {
     var person = msg.match[1];
     var channelId = messageHelper.getChannelId(msg);
-    var result = UI.removePlayer(channelId, person);
-    UI.checkSession(msg, result, channelId, person);
+    var result = PI.removePlayer(channelId, person);
+    GE.checkSession(msg, result, channelId, person);
   });
 
   robot.hear(trigger.getTrigger('test'), function (msg) {
@@ -56,7 +58,7 @@ function Highnoon (robot) {
 
   robot.hear(trigger.getTrigger('cancel'), function (msg) {
     var channelId = messageHelper.getChannelId(msg);
-    UI.removeSession(msg, channelId);
+    SI.removeSession(msg, channelId);
   });
 
   robot.hear(trigger.getTrigger('time'), function (msg) {

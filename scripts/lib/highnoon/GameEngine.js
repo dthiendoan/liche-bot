@@ -7,7 +7,9 @@ var PLAYER_ALREADY_IN_SESSION = require('./lib/States.js').PLAYER_ALREADY_IN_SES
 var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
 var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
 
-var removeSession = require('./UserInterface.js').removeSession;
+var SessionInterface = require('./SessionInterface.js');
+var SI = new SessionInterface();
+var removeSession = SI.removeSession;
 
 class GameEngine {
   /////////// SETTER METHODS ////////////
