@@ -27,14 +27,14 @@ function Highnoon (robot) {
   robot.hear(trigger.getTrigger(), function (msg) {
     var person = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
-    var result = SI.createSession(SessionStore[channelId], channelId, person);
+    var result = SI.createSession(channelId, person);
     GE.checkSession(msg, result, channelId, person);
   });
 
   robot.hear(trigger.getTrigger('(\\d+?)'), function (msg) {
     var person = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
-    var result = SI.createSession(SessionStore[channelId], channelId, person, msg.match[1]);
+    var result = SI.createSession(channelId, person, msg.match[1]);
     GE.checkSession(msg, result, channelId, person);
   });
 

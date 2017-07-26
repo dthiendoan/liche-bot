@@ -90,7 +90,7 @@ class GameEngine {
           msg.reply('HEY! You\'re not part of this duel! Take a seat son and wait for your turn!');
         }
       } else {
-        msg.reply('Please wait for all players to enter the game first before shooting! (Players needed: ' + sessionStore[channelId].gameState.playersNeeded() + ')');
+        msg.reply('Please wait for all players to enter the game first before shooting! (Players needed: ' + session.playersNeeded() + ')');
       }
     } else {
       msg.reply('Sorry! A session has not started yet.  Please type in &highnoon to start a session.');
