@@ -92,6 +92,14 @@ class GameEngine {
           } else {
             msg.reply(shooter + ' misfired! ' + shooter + ' is DEAD and out of the duel!');
             session.players[shooter].gotShot();
+            if (session.onePlayerLeft()) {
+              session.duelIsDone();
+              for (var player in session.players) {
+                if (session.players[player].isAlive()) {
+                  msg.reply(player + ' is the last person standing. ' + player + ' wins the duel!');
+                }
+              }
+            }
           } 
         } else {
           msg.reply('HEY! You\'re not part of this duel! Take a seat son and wait for your turn!');

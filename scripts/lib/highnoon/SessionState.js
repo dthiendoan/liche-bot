@@ -3,6 +3,7 @@ class Session {
     this.channelId = channelId;
     this.players = {};
     this.maxPlayers = Number(maxPlayers);
+    this.playersDead = 0;
     this.allShotsFired = false;
     this.countdownValue = Math.floor(Math.random() * 7500) + 2500; // Guarantees to never be zero
     this.timer = null;
@@ -31,6 +32,14 @@ class Session {
 
   isTimeToDraw() {
     return this.elapsed >= this.countdownValue;
+  }
+
+  incrementDeathCounter() {
+    this.playersDead++;
+  }
+
+  onePlayerLeft() {
+    return this.playersDead === this.maxPlayers - 1;
   }
 
   duelIsDone() {
