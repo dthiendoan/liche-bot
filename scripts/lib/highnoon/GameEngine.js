@@ -9,6 +9,14 @@ var INVALID_NUMBER_OF_PLAYERS = require('./lib/States.js').INVALID_NUMBER_OF_PLA
 var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
 var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
 
+var CAUSE_OF_DEATH = [
+  'right at the heart! Gae bolg style, bitches.',
+  'right at the neck! Blood starts squirting everywhere.',
+  'right at the knee! No more adventures for this lad...',
+  'right at the family jewels! Ouch...Ramsay Bolton would be proud.',
+  'square at the head! OOOOOOH, H-H-H-HEADSHOT! YOU CAN DANCE ALL DAY!'
+];
+
 var SessionInterface = require('./SessionInterface.js');
 var SI = new SessionInterface();
 
@@ -71,7 +79,7 @@ class GameEngine {
     };
   }
 
-  checkShot(msg, session, channelId, shooter) {
+  checkShot(msg, session, channelId, shooter, victim) {
     var sessionExists = Boolean(session);
     // check if a session exists
     if (sessionExists) {
@@ -80,27 +88,31 @@ class GameEngine {
         // check if the person is one of the players and if the duel is ongoing
         if (session.players[shooter] !== undefined && session.players[shooter].getName() === shooter && !session.allShotsFired) {
           // check if it is time to draw
-          if (session.isTimeToDraw()) {
-            msg.reply(shooter + ' shot first! Everyone else falls dead. ' + shooter + ' wins!');
-            for (var player in session.players) {
-              if (session.players[player].getName() !== shooter) {
-                session.players[player].gotShot();
+          if (session.isTimeToDraw() && !session.onePlayerLeft()) {
+            if (session.players[victim]) {
+              if (session.players[victim].isAlive()) {
+                msg.reply(shooter + ' shot ' + victim + ' ' + CAUSE_OF_DEATH[Math.floor(Math.random(CAUSE_OF_DEATH.length))] + ' ' + victim + ' falls dead.');
+                session.players[victim].gotShot();
+                session.increaseDeathCount();
+              } else {
+                msg.reply(victim + 'is already dead! No need to overkill, ' + shooter + '!');
               }
             }
-            session.duelIsDone();
-            SI.removeSession(msg, channelId);
           } else {
             msg.reply(shooter + ' misfired! ' + shooter + ' is DEAD and out of the duel!');
             session.players[shooter].gotShot();
-            if (session.onePlayerLeft()) {
-              session.duelIsDone();
-              for (var player in session.players) {
-                if (session.players[player].isAlive()) {
-                  msg.reply(player + ' is the last person standing. ' + player + ' wins the duel!');
-                }
+            session.increaseDeathCount();
+          }
+          // check if there is only one player left after results
+          if (session.onePlayerLeft() && !session.allShotsFired) {
+            session.duelIsDone();
+            for (var player in session.players) {
+              if (session.players[player].isAlive()) {
+                msg.reply(player + ' is the last person standing. ' + player + ' wins the duel!');
               }
             }
-          } 
+            SI.removeSession(msg, channelId);
+          }
         } else {
           msg.reply('HEY! You\'re not part of this duel! Take a seat son and wait for your turn!');
         }

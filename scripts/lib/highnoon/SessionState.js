@@ -34,7 +34,7 @@ class Session {
     return this.elapsed >= this.countdownValue;
   }
 
-  incrementDeathCounter() {
+  increaseDeathCount() {
     this.playersDead++;
   }
 

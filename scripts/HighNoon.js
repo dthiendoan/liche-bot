@@ -50,10 +50,11 @@ function Highnoon (robot) {
     GE.testDuel(msg, SessionStore[channelId]);
   });
 
-  robot.hear(/BANG!/i, function (msg) {
+  robot.hear(/BANG! \w+/i, function (msg) {
     var shooter = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
-    GE.checkShot(msg, SessionStore[channelId], channelId, shooter);
+    var victim = msg.match[0].slice(6);
+    GE.checkShot(msg, SessionStore[channelId], channelId, shooter, victim);
   });
 
   robot.hear(trigger.getTrigger('cancel'), function (msg) {
