@@ -38,7 +38,7 @@ function Highnoon (robot) {
     GE.checkSession(msg, result, channelId, person);
   });
 
-  robot.hear(trigger.getTrigger('removePlayer', '([\\s\\S]+?)'), function (msg) {
+  robot.hear(trigger.getTrigger('remove', '([\\s\\S]+?)'), function (msg) {
     var person = msg.match[1];
     var channelId = messageHelper.getChannelId(msg);
     var result = PI.removePlayer(channelId, person);
@@ -74,6 +74,10 @@ function Highnoon (robot) {
     var channelId = messageHelper.getChannelId(msg);
     var result = SI.removeSession(msg, channelId);
     GE.checkSession(msg, result, channelId);
+  });
+
+  robot.hear(trigger.getTrigger('stats'), function (msg) {
+    GE.showResults(msg);
   });
 
   robot.hear(trigger.getTrigger('time'), function (msg) {

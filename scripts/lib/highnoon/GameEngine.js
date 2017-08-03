@@ -74,13 +74,14 @@ class GameEngine {
 
     var didWin = Number(session.players[player].isAlive());
     var didLose = Number(!session.players[player].isAlive());
-    var selectQuery = 'SELECT 1 FROM highnoon WHERE username = "' + player + '" ORDER BY username LIMIT 1';
+    var whereClause = 'WHERE username = "' + player + '"';
+    var selectQuery = 'SELECT 1 FROM highnoon ' + whereClause + ' ORDER BY username LIMIT 1';
     var insertQuery = 'INSERT INTO highnoon (username, wins, losses) VALUES ("' + player + '", ' + didWin + ', ' + didLose + ')';
-    var updateQuery = 'UPDATE highnoon SET wins = wins + ' + didWin + ', losses = losses + ' + didLose + ' WHERE username = "' + player + '"';
+    var updateQuery = 'UPDATE highnoon SET wins = wins + ' + didWin + ', losses = losses + ' + didLose + ' ' + whereClause;
 
     connection.query(selectQuery, function(err, results, fields) {
       if (err) {
-        msg.reply('ERROR: Failed to add/update database with results. Please check server logs for details.');
+        msg.reply('ERROR: Failed to add/update database with results of ' + player + '. Please check server logs for details.');
         console.log(err);
         return FAILED_TO_RECORD_RESULTS;
       } else {
@@ -94,6 +95,24 @@ class GameEngine {
         }
         console.log('Results of this session have been added to database.');
         return RESULTS_SUCCESSFULLY_RECORDED;
+      }
+    });
+  }
+
+  showResults(msg) {
+    var connection = connectionHelper.getConnection();
+    var selectQuery = 'SELECT * FROM highnoon';
+
+    connection.query(selectQuery, function(err, rows) {
+      if (err) {
+        msg.reply('Failed to bring up results!  Please check the code for showResults.');
+        console.log(err);
+      } else {
+        var resultsString = 'HIGHNOON STATISTICS:\n';
+        for (var index = 0; index < rows.length; index++) {
+          resultsString = resultsString + rows[index].username + '- wins: ' + rows[index].wins + ' losses: ' + rows[index].losses + '\n';
+        }
+        msg.reply(resultsString);
       }
     });
   }
@@ -230,14 +249,7 @@ class GameEngine {
               if (session.players[player].isAlive()) {
                 msg.reply(player + ' is the last person standing. ' + player + ' wins the duel!');
               }
-              recordResults = this.recordResults(msg, session, player);
-              if (recordResults === FAILED_TO_RECORD_RESULTS) {
-                msg.reply('ERROR: Failed to record results for ' + player + '.  Please check your code for recordResults.');
-                break;
-              }
-            }
-            if (recordResults === RESULTS_SUCCESSFULLY_RECORDED) {
-              msg.reply('Results of this session have been added to database.');
+              this.recordResults(msg, session, player);
             }
             SI.removeSession(msg, channelId);
           }
