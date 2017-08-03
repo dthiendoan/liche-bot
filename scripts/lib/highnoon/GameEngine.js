@@ -76,7 +76,7 @@ class GameEngine {
     var didLose = Number(!session.players[player].isAlive());
     var selectQuery = 'SELECT 1 FROM highnoon WHERE username = "' + player + '" ORDER BY username LIMIT 1';
     var insertQuery = 'INSERT INTO highnoon (username, wins, losses) VALUES ("' + player + '", ' + didWin + ', ' + didLose + ')';
-    var updateQuery = 'UPDATE highnoon SET wins = wins + ' + didWin + ', losses = losses + ' + didLose + 'WHERE username = "' + player + '"';
+    var updateQuery = 'UPDATE highnoon SET wins = wins + ' + didWin + ', losses = losses + ' + didLose + ' WHERE username = "' + player + '"';
 
     connection.query(selectQuery, function(err, results, fields) {
       if (err) {
