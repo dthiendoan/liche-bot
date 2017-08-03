@@ -32,6 +32,8 @@ var CAUSE_OF_DEATH = [
   'with dysentery!'
 ];
 
+var COUNTDOWN_INTERVAL = 1500; 
+
 var SessionInterface = require('./SessionInterface.js');
 var SI = new SessionInterface();
 
@@ -46,13 +48,13 @@ class GameEngine {
       clearInterval(session.timer);
     } else {
       msg.reply('...');
-      session.elapsed += 1000;
+      session.elapsed += COUNTDOWN_INTERVAL;
     }
   }
 
   startTimer(msg, session) {
     var self = this;
-    session.timer = setInterval(function() { self.changeTimer(msg, session) }, 1000);
+    session.timer = setInterval(function() { self.changeTimer(msg, session) }, COUNTDOWN_INTERVAL);
   }
 
   /////////// CHECKS METHODS ////////////
