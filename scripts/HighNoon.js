@@ -57,6 +57,12 @@ function Highnoon (robot) {
     GE.checkShot(msg, SessionStore[channelId], channelId, shooter, victim);
   });
 
+  robot.hear(/BANG!/i, function (msg) {
+    var shooter = messageHelper.getPerson(msg);
+    var channelId = messageHelper.getChannelId(msg);
+    GE.checkShot(msg, SessionStore[channelId], channelId, shooter);
+  });
+
   robot.hear(trigger.getTrigger('cancel'), function (msg) {
     var channelId = messageHelper.getChannelId(msg);
     var result = SI.removeSession(msg, channelId);
