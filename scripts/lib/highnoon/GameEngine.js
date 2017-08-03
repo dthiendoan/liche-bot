@@ -5,6 +5,10 @@ var SESSION_DOES_NOT_EXIST = require('./lib/States.js').SESSION_DOES_NOT_EXIST;
 var PLAYER_ADDED = require('./lib/States.js').PLAYER_ADDED;
 var PLAYER_ALREADY_IN_SESSION = require('./lib/States.js').PLAYER_ALREADY_IN_SESSION;
 var ALL_PLAYER_SLOTS_FILLED = require('./lib/States.js').ALL_PLAYER_SLOTS_FILLED;
+var NOT_ENOUGH_PLAYERS = require('./lib/State.js').NOT_ENOUGH_PLAYERS;
+var PLAYER_IS_READY = require('./lib/State.js').PLAYER_IS_READY;
+var PLAYER_ALREADY_READY = require('./lib/State.js').PLAYER_ALREADY_READY;
+var ALL_PLAYERS_READY = require('./lib/States.js').ALL_PLAYERS_READY;
 var INVALID_NUMBER_OF_PLAYERS = require('./lib/States.js').INVALID_NUMBER_OF_PLAYERS;
 var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
 var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
@@ -77,8 +81,24 @@ class GameEngine {
         msg.reply('Another player, ' + person + ', added to session in room ' + channelId);
         break;
       case ALL_PLAYER_SLOTS_FILLED:
-        msg.reply('All player slots filled. It\'s hiiiiigh noon...');
-        this.startTimer(msg, SessionStore[channelId]);
+        msg.reply('All player slots have been filled.  Everyone, please type \'ready\' to begin the duel.');
+        break;
+      case NOT_ENOUGH_PLAYERS:
+        msg.reply('Sorry, looks like someone is missing out or just left the duel! Please invite more people to fill in the session.');
+        break;
+      case PLAYER_IS_READY:
+        msg.reply('You are now ready, player ' + person);
+        break;
+      case PLAYER_ALREADY_READY:
+        msg.reply('Calm your shit down ' + person + '!  You\'re already ready.  Please wait for the other players to ready up...')
+        break;
+      case ALL_PLAYERS_READY:
+        msg.reply('All players are now ready.  Game\'s about to begin...');
+        var Game = this;
+        setTimeout(function() {
+          msg.reply('It\'s hiiiiigh noon...');
+          Game.startTimer(msg, SessionStore[channelId]);
+        }, 2500);
         break;
       case INVALID_NUMBER_OF_PLAYERS:
         msg.reply('Sorry! The number of players you\'ve chosen is invalid. Please try a number between 2 and 10.');
@@ -95,6 +115,29 @@ class GameEngine {
       default:
         msg.reply('Sorry, the session is already full. Please try again in a little bit!');
     };
+  }
+
+  checkReady(msg, channelId, player) {
+    var sessionExists = Boolean(SessionStore[channelId]);
+    var readyCounter = 0;
+    if (sessionExists) {
+      if (sessionIsFull()) {
+        if (channelId].players[player].isReady()) {
+          return PLAYER_ALREADY_READY;
+        }
+        SessionStore[channelId].players[player].setReady();
+        for (var player in SessionStore[channelId].players) {
+          if (SessionStore[channelId].players[player].isReady()) {
+            readyCounter++;
+          }
+        }
+        return readyCounter === SessionStore[channelId].getMaxPlayers() ? ALL_PLAYERS_READY : PLAYER_IS_READY;
+      } else {
+        return NOT_ENOUGH_PLAYERS;
+      }
+    } else {
+      return SESSION_DOES_NOT_EXIST;
+    }
   }
 
   checkShot(msg, session, channelId, shooter, victim) {

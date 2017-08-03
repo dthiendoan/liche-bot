@@ -63,6 +63,12 @@ function Highnoon (robot) {
     GE.checkShot(msg, SessionStore[channelId], channelId, shooter);
   });
 
+  robot.hear(/^READY$/, function (msg) {
+    var player = messageHelper.getPerson(msg);
+    var channelId = messageHelper.getChannelId(msg);
+    GE.checkReady(msg, channelId, player);
+  });
+
   robot.hear(trigger.getTrigger('cancel'), function (msg) {
     var channelId = messageHelper.getChannelId(msg);
     var result = SI.removeSession(msg, channelId);

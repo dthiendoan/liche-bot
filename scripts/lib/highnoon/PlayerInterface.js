@@ -28,6 +28,9 @@ class PlayerInterface {
     if (sessionExists) {
       if (SessionStore[channelId].players[person] !== undefined) {
         delete SessionStore[channelId].players[person];
+        for (var player in SessionStore[channelId].players) {
+          SessionStore[channelId].players[player].unReady();  // if they were already in preparation state, reset all readys
+        }
         return PLAYER_REMOVED;
       } else {
         return PLAYER_DOES_NOT_EXIST;
