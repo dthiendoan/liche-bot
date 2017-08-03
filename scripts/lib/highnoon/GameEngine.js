@@ -108,9 +108,9 @@ class GameEngine {
         msg.reply('Failed to bring up results!  Please check the code for showResults.');
         console.log(err);
       } else {
-        var resultsString = 'HIGHNOON STATISTICS:\n';
+        var resultsString = '\n~~~HIGHNOON STATISTICS~~~\n';
         for (var index = 0; index < rows.length; index++) {
-          resultsString = resultsString + rows[index].username + '- wins: ' + rows[index].wins + ' losses: ' + rows[index].losses + '\n';
+          resultsString = resultsString + rows[index].username + ' - wins: ' + rows[index].wins + ', losses: ' + rows[index].losses + '\n';
         }
         msg.reply(resultsString);
       }
