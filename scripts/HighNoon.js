@@ -66,7 +66,8 @@ function Highnoon (robot) {
   robot.hear(/^ready$/, function (msg) {
     var player = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
-    GE.checkReady(msg, channelId, player);
+    var result = GE.checkReady(msg, channelId, player);
+    GE.checkSession(msg, result, channelId);
   });
 
   robot.hear(trigger.getTrigger('cancel'), function (msg) {
