@@ -41,17 +41,18 @@ class GameEngine {
   /////////// SETTER METHODS ////////////
 
   changeTimer(msg, session) {
-    msg.reply('...');
-    session.elapsed += 2500;
     if (session.elapsed >= session.countdownValue) {
       msg.reply('DRAW!');
       clearInterval(session.timer);
+    } else {
+      msg.reply('...');
+      session.elapsed += 1000;
     }
   }
 
   startTimer(msg, session) {
     var self = this;
-    session.timer = setInterval(function() { self.changeTimer(msg, session) }, session.countdownValue);
+    session.timer = setInterval(function() { self.changeTimer(msg, session) }, 1000);
   }
 
   /////////// CHECKS METHODS ////////////
