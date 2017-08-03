@@ -12,10 +12,12 @@ var GameEngine = require('./lib/highnoon/GameEngine.js');
 help.setHelpCategory(
   'highnoon',
   'mcree\'s favorite time of the day',
-  '/highnoon test - hello world message\n' +
-  '/highnoon - use mcree\'s ultimate\n' +
-  '/highnoon spin - spins the barrel\n' +
-  '/highnoon stats - display the game scores'
+  '&highnoon [number of players] - creates a session with optional specification of player count\n' +
+  'ready - type this in when the game asks everyone to type ready to start the duel\n' +
+  'BANG! <username> - shoots a player\n' +
+  '&highnoon stats - display the game scores\n' +
+  '&highnoon test - manually triggers draw time\n' +
+  '&highnoon debug - debugging feature\n'
 );
 
 function Highnoon (robot) {
