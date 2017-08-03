@@ -67,7 +67,7 @@ function Highnoon (robot) {
     var player = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
     var result = GE.checkReady(msg, channelId, player);
-    GE.checkSession(msg, result, channelId);
+    GE.checkSession(msg, result, channelId, player);
   });
 
   robot.hear(trigger.getTrigger('cancel'), function (msg) {
