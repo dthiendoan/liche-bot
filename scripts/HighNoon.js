@@ -57,7 +57,7 @@ function Highnoon (robot) {
     GE.checkShot(msg, SessionStore[channelId], channelId, shooter, victim);
   });
 
-  robot.hear(/BANG!/i, function (msg) {
+  robot.hear('BANG!', function (msg) {
     var shooter = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
     GE.checkShot(msg, SessionStore[channelId], channelId, shooter);
