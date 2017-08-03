@@ -91,7 +91,7 @@ class GameEngine {
           if (session.isTimeToDraw() && !session.onePlayerLeft()) {
             if (session.players[victim]) {
               if (session.players[victim].isAlive()) {
-                msg.reply(shooter + ' shot ' + victim + ' ' + CAUSE_OF_DEATH[Math.floor(Math.random(CAUSE_OF_DEATH.length))] + ' ' + victim + ' falls dead.');
+                msg.reply(shooter + ' shot ' + victim + ' ' + CAUSE_OF_DEATH[Math.floor(Math.random() * CAUSE_OF_DEATH.length)] + ' ' + victim + ' falls dead.');
                 session.players[victim].gotShot();
                 session.increaseDeathCount();
               } else {
