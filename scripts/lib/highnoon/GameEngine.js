@@ -89,14 +89,24 @@ class GameEngine {
         if (session.players[shooter] !== undefined && session.players[shooter].getName() === shooter && !session.allShotsFired) {
           // check if it is time to draw
           if (session.isTimeToDraw() && !session.onePlayerLeft()) {
-            if (session.players[victim]) {
-              if (session.players[victim].isAlive()) {
-                msg.reply(shooter + ' shot ' + victim + ' ' + CAUSE_OF_DEATH[Math.floor(Math.random() * CAUSE_OF_DEATH.length)] + ' ' + victim + ' falls dead.');
-                session.players[victim].gotShot();
-                session.increaseDeathCount();
+            if (session.players[shooter].isAlive()) {
+              if (session.players[victim]) {
+                if (victim == shooter) {
+                  msg.reply('If you really want to shoot yourself ' + shooter + ', please try a Russian roulette instead...');
+                } else {
+                  if (session.players[victim].isAlive()) {
+                    msg.reply(shooter + ' shot ' + victim + ' ' + CAUSE_OF_DEATH[Math.floor(Math.random() * CAUSE_OF_DEATH.length)] + ' ' + victim + ' falls dead.');
+                    session.players[victim].gotShot();
+                    session.increaseDeathCount();
+                  } else {
+                    msg.reply(victim + 'is already dead! No need to overkill, ' + shooter + '!');
+                  }
+                }
               } else {
-                msg.reply(victim + 'is already dead! No need to overkill, ' + shooter + '!');
+                msg.reply(shooter + 'shoots in the air and hits...nothing. Huh???');
               }
+            } else {
+              msg.reply('Sorry ' + shooter + ', you\'re already dead!');
             }
           } else {
             msg.reply(shooter + ' misfired! ' + shooter + ' is DEAD and out of the duel!');
