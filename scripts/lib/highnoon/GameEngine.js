@@ -83,8 +83,10 @@ class GameEngine {
       } else {
         var query;
         if (results.length > 0) {
+          console.log('Running:', updateQuery);
           query = connection.query(updateQuery);
         } else {
+          console.log('Running:', insertQuery);
           query = connection.query(insertQuery);
         }
         msg.reply('Results of this session have been added to database.');
@@ -223,6 +225,7 @@ class GameEngine {
               if (session.players[player].isAlive()) {
                 msg.reply(player + ' is the last person standing. ' + player + ' wins the duel!');
               }
+              this.recordResults(msg, session, player);
             }
             SI.removeSession(msg, channelId);
           }
