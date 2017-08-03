@@ -16,6 +16,8 @@ var INVALID_NUMBER_OF_PLAYERS = require('./lib/States.js').INVALID_NUMBER_OF_PLA
 var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
 var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
 var PLAYER_DID_NOT_JOIN = require('./lib/States.js').PLAYER_DID_NOT_JOIN;
+var FAILED_TO_RECORD_RESULTS = require('./lib/States.js').FAILED_TO_RECORD_RESULTS;
+var RESULTS_SUCCESSFULLY_RECORDED = require('./lib/States.js').RESULTS_SUCCESSFULLY_RECORDED;
 
 var CAUSE_OF_DEATH = [
   'right at the heart! Gae bolg style, bitches.',
@@ -80,6 +82,7 @@ class GameEngine {
       if (err) {
         msg.reply('ERROR: Failed to add/update database with results. Please check server logs for details.');
         console.log(err);
+        return FAILED_TO_RECORD_RESULTS;
       } else {
         var query;
         if (results.length > 0) {
@@ -89,7 +92,8 @@ class GameEngine {
           console.log('Running:', insertQuery);
           query = connection.query(insertQuery);
         }
-        msg.reply('Results of this session have been added to database.');
+        console.log('Results of this session have been added to database.');
+        return RESULTS_SUCCESSFULLY_RECORDED;
       }
     });
   }
@@ -221,11 +225,19 @@ class GameEngine {
           if (session.onePlayerLeft() && !session.allShotsFired) {
             session.duelIsDone();
             clearInterval(session.timer);  // stops countdown if it is still going
+            var recordResults;
             for (var player in session.players) {
               if (session.players[player].isAlive()) {
                 msg.reply(player + ' is the last person standing. ' + player + ' wins the duel!');
               }
-              this.recordResults(msg, session, player);
+              recordResults = this.recordResults(msg, session, player);
+              if (recordResults === FAILED_TO_RECORD_RESULTS) {
+                msg.reply('ERROR: Failed to record results for ' + player + '.  Please check your code for recordResults.');
+                break;
+              }
+            }
+            if (recordResults === RESULTS_SUCCESSFULLY_RECORDED) {
+              msg.reply('Results of this session have been added to database.');
             }
             SI.removeSession(msg, channelId);
           }
