@@ -26,9 +26,6 @@ class GameEngine {
   /////////// SETTER METHODS ////////////
 
   changeTimer(msg, session) {
-    if (!session) {
-      clearInterval(session.timer);
-    }
     msg.reply('...');
     session.elapsed += 2500;
     if (session.elapsed >= session.countdownValue) {
@@ -119,6 +116,7 @@ class GameEngine {
           // check if there is only one player left after results
           if (session.onePlayerLeft() && !session.allShotsFired) {
             session.duelIsDone();
+            clearInterval(session.timer);  // stops countdown if it is still going
             for (var player in session.players) {
               if (session.players[player].isAlive()) {
                 msg.reply(player + ' is the last person standing. ' + player + ' wins the duel!');
