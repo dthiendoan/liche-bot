@@ -26,6 +26,9 @@ class GameEngine {
   /////////// SETTER METHODS ////////////
 
   changeTimer(msg, session) {
+    if (!session) {
+      clearInterval(session.timer);
+    }
     msg.reply('...');
     session.elapsed += 2500;
     if (session.elapsed >= session.countdownValue) {
