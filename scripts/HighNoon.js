@@ -63,7 +63,7 @@ function Highnoon (robot) {
     GE.checkShot(msg, SessionStore[channelId], channelId, shooter);
   });
 
-  robot.hear(/^READY$/, function (msg) {
+  robot.hear(/^ready$/, function (msg) {
     var player = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
     GE.checkReady(msg, channelId, player);

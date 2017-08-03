@@ -121,7 +121,7 @@ class GameEngine {
     var sessionExists = Boolean(SessionStore[channelId]);
     var readyCounter = 0;
     if (sessionExists) {
-      if (sessionIsFull()) {
+      if (SessionStore[channelId].sessionIsFull()) {
         if (SessionStore[channelId].players[player].isReady()) {
           return PLAYER_ALREADY_READY;
         }
