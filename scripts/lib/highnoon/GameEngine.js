@@ -1,3 +1,5 @@
+var connectionHelper = require('../ConnectionHelper.js');
+
 var SESSION_CREATED = require('./lib/States.js').SESSION_CREATED;
 var SESSION_FULL = require('./lib/States.js').SESSION_FULL;
 var SESSION_REMOVED = require('./lib/States.js').SESSION_REMOVED;
@@ -61,6 +63,33 @@ class GameEngine {
   startTimer(msg, session) {
     var self = this;
     session.timer = setInterval(function() { self.changeTimer(msg, session) }, COUNTDOWN_INTERVAL);
+  }
+
+  /////////// DATABASE METHODS ///////////
+
+  recordResults(msg, session, player) {
+    var connection = connectionHelper.getConnection();
+
+    var didWin = Number(session.players[player].isAlive());
+    var didLose = Number(!session.players[player].isAlive());
+    var selectQuery = 'SELECT 1 FROM highnoon WHERE username = "' + player + '" ORDER BY username LIMIT 1';
+    var insertQuery = 'INSERT INTO highnoon (username, wins, losses) VALUES ("' + player + '", ' + didWin + ', ' + didLose + ')';
+    var updateQuery = 'UPDATE highnoon SET wins = wins + ' + didWin + ', losses = losses + ' + didLose + 'WHERE username = "' + player + '"';
+
+    connection.query(selectQuery, function(err, results, fields) {
+      if (err) {
+        msg.reply('ERROR: Failed to add/update database with results. Please check server logs for details.');
+        console.log(err);
+      } else {
+        var query;
+        if (results.length > 0) {
+          query = connection.query(updateQuery);
+        } else {
+          query = connection.query(insertQuery);
+        }
+        msg.reply('Results of this session have been added to database.');
+      }
+    });
   }
 
   /////////// CHECKS METHODS ////////////
