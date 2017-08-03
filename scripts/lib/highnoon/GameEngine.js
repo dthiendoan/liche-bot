@@ -12,6 +12,7 @@ var ALL_PLAYERS_READY = require('./lib/States.js').ALL_PLAYERS_READY;
 var INVALID_NUMBER_OF_PLAYERS = require('./lib/States.js').INVALID_NUMBER_OF_PLAYERS;
 var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
 var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
+var PLAYER_DID_NOT_JOIN = require('./lib/States.js').PLAYER_DID_NOT_JOIN;
 
 var CAUSE_OF_DEATH = [
   'right at the heart! Gae bolg style, bitches.',
@@ -109,6 +110,9 @@ class GameEngine {
       case PLAYER_DOES_NOT_EXIST:
         msg.reply('Player ' + person + ' does not exist in the current session! Are you sure you got the right person?');
         break;
+      case PLAYER_DID_NOT_JOIN:
+        msg.reply('Sorry! You didn\'t join this session yet. Try typing in \'&highnoon\' to join the game.');
+        break;
       case PLAYER_ALREADY_IN_SESSION:
         msg.reply('You are already in this session ' + person + '!');
         break;
@@ -121,6 +125,9 @@ class GameEngine {
     var sessionExists = Boolean(SessionStore[channelId]);
     var readyCounter = 0;
     if (sessionExists) {
+      if (!SessionStore[channelId].players[player]) {
+        return PLAYER_DID_NOT_JOIN;
+      }
       if (SessionStore[channelId].sessionIsFull()) {
         if (SessionStore[channelId].players[player].isReady()) {
           return PLAYER_ALREADY_READY;
