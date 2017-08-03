@@ -9,6 +9,7 @@ var NOT_ENOUGH_PLAYERS = require('./lib/States.js').NOT_ENOUGH_PLAYERS;
 var PLAYER_IS_READY = require('./lib/States.js').PLAYER_IS_READY;
 var PLAYER_ALREADY_READY = require('./lib/States.js').PLAYER_ALREADY_READY;
 var ALL_PLAYERS_READY = require('./lib/States.js').ALL_PLAYERS_READY;
+var GAME_IN_PROGRESS = require('./lib/States.js').GAME_IN_PROGRESS;
 var INVALID_NUMBER_OF_PLAYERS = require('./lib/States.js').INVALID_NUMBER_OF_PLAYERS;
 var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
 var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
@@ -95,11 +96,15 @@ class GameEngine {
         break;
       case ALL_PLAYERS_READY:
         msg.reply('All players are now ready.  Game\'s about to begin...');
-        var Game = this;
+        SessionStore[channelId].startGame();
+        var GE = this;
         setTimeout(function() {
           msg.reply('It\'s hiiiiigh noon...');
-          Game.startTimer(msg, SessionStore[channelId]);
+          GE.startTimer(msg, SessionStore[channelId]);
         }, 2500);
+        break;
+      case GAME_IN_PROGRESS:
+        msg.reply('Sorry! The game is already in progress, you can\'t run that command!');
         break;
       case INVALID_NUMBER_OF_PLAYERS:
         msg.reply('Sorry! The number of players you\'ve chosen is invalid. Please try a number between 2 and 10.');

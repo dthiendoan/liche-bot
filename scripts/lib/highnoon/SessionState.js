@@ -4,6 +4,7 @@ class Session {
     this.players = {};
     this.maxPlayers = Number(maxPlayers);
     this.playersDead = 0;
+    this.gameInProgress = false;
     this.allShotsFired = false;
     this.countdownValue = Math.floor(Math.random() * 7501) + 2500; // Guarantees to never be zero, Range: 2.5 - 10 seconds
     this.timer = null;
@@ -28,6 +29,14 @@ class Session {
 
   sessionIsFull() {
     return Object.keys(this.players).length >= this.maxPlayers;
+  }
+
+  isGameInProgress() {
+    return this.gameInProgress;
+  }
+
+  startGame() {
+    this.gameInProgress = true;
   }
 
   isTimeToDraw() {

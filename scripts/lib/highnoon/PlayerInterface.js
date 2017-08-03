@@ -3,6 +3,7 @@ var SESSION_DOES_NOT_EXIST = require('./lib/States.js').SESSION_DOES_NOT_EXIST;
 var PLAYER_ADDED = require('./lib/States.js').PLAYER_ADDED;
 var ALL_PLAYER_SLOTS_FILLED = require('./lib/States.js').ALL_PLAYER_SLOTS_FILLED;
 var PLAYER_ALREADY_IN_SESSION = require('./lib/States.js').PLAYER_ALREADY_IN_SESSION;
+var GAME_IN_PROGRESS = require('./lib/States.js').GAME_IN_PROGRESS;
 var PLAYER_REMOVED = require('./lib/States.js').PLAYER_REMOVED;
 var PLAYER_DOES_NOT_EXIST = require('./lib/States.js').PLAYER_DOES_NOT_EXIST;
 
@@ -27,6 +28,9 @@ class PlayerInterface {
     var sessionExists = Boolean(SessionStore[channelId]);
     if (sessionExists) {
       if (SessionStore[channelId].players[person] !== undefined) {
+        if (SessionStore[channelId].isGameInProgress()) {
+          return GAME_IN_PROGRESS;
+        }
         delete SessionStore[channelId].players[person];
         for (var player in SessionStore[channelId].players) {
           SessionStore[channelId].players[player].unReady();  // if they were already in preparation state, reset all readys
