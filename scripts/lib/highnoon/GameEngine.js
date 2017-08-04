@@ -233,7 +233,7 @@ class GameEngine {
                       session.increaseDeathCount();
                     }
                   } else {
-                    msg.reply(victim + 'is already dead! No need to overkill, ' + shooter + '!');
+                    msg.reply(victim + ' is already dead! No need to overkill, ' + shooter + '!');
                   }
                 }
               } else {
