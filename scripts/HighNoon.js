@@ -41,7 +41,7 @@ function Highnoon (robot) {
   });
 
   robot.hear(trigger.getTrigger('remove', '([\\s\\S]+?)'), function (msg) {
-    var person = msg.match[1];
+    var person = msg.match[1].toLowerCase();
     var channelId = messageHelper.getChannelId(msg);
     var result = PI.removePlayer(channelId, person);
     GE.checkSession(msg, result, channelId, person);
@@ -52,36 +52,36 @@ function Highnoon (robot) {
     GE.testDuel(msg, SessionStore[channelId]);
   });
 
-  robot.hear(/DODGE! \w+$/i, function (msg) {
+  robot.hear(/DODGE! \w+\s*$/i, function (msg) {
     var player = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
-    var direction = msg.match[0].slice(7);
+    var direction = msg.match[0].trim().toLowerCase().slice(7);
     GE.checkDodge(msg, SessionStore[channelId], player, direction);
   });
 
-  robot.hear(/BANG! \w+ \w+$/i, function (msg) {
+  robot.hear(/BANG! \w+ \w+\s*$/i, function (msg) {
     var shooter = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
-    var args = msg.match[0].split(' ');
+    var args = msg.match[0].trim().toLowerCase().split(' ');
     var victim = args[1];
     var direction = args[2];
     GE.checkShot(msg, SessionStore[channelId], channelId, shooter, victim, direction);
   });
 
-  robot.hear(/BANG! \w+$/i, function (msg) {
+  robot.hear(/BANG! \w+\s*$/i, function (msg) {
     var shooter = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
-    var victim = msg.match[0].slice(6);
+    var victim = msg.match[0].trim().toLowerCase().slice(6);
     GE.checkShot(msg, SessionStore[channelId], channelId, shooter, victim);
   });
 
-  robot.hear(/^BANG!$/, function (msg) {
+  robot.hear(/^BANG!\s*$/i, function (msg) {
     var shooter = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
     GE.checkShot(msg, SessionStore[channelId], channelId, shooter);
   });
 
-  robot.hear(/^ready$/, function (msg) {
+  robot.hear(/^READY\s*$/i, function (msg) {
     var player = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
     var result = GE.checkReady(msg, channelId, player);

@@ -200,6 +200,7 @@ class GameEngine {
         msg.reply('You cannot move in that direction, please try \'DODGE! left\' or \'DODGE! right\' instead.');
       } else if (session.sessionIsFull() && session.isTimeToDraw()) {
         session.players[player].setDodge(direction);
+        msg.reply(player + ' dodges ' + direction + '!');
       } else {
         msg.reply('The duel has not started yet!  Please wait for everyone to be ready first before proceeding.');
       }
