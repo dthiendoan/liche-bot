@@ -33,7 +33,7 @@ class GameEngine {
 
   changeTimer(msg, session) {
     if (session.elapsed >= session.countdownValue) {
-      msg.reply('DRAW!');
+      msg.reply('`DRAW!`');
       clearInterval(session.timer);
     } else {
       msg.reply('...');
@@ -60,7 +60,7 @@ class GameEngine {
 
     connection.query(selectQuery, function(err, results, fields) {
       if (err) {
-        msg.reply('ERROR: Failed to add/update database with results of ' + player + '. Please check server logs for details.');
+        msg.reply('_*ERROR*: Failed to add/update database with results of ' + player + '. Please check server logs for details._');
         console.log(err);
         return FAILED_TO_RECORD_RESULTS;
       } else {
@@ -81,13 +81,14 @@ class GameEngine {
 
     connection.query(selectQuery, function(err, rows) {
       if (err) {
-        msg.reply('Failed to bring up results!  Please check the code for showResults.');
+        msg.reply('_*Failed to bring up results!*  Please check the code for showResults._');
         console.log(err);
       } else {
-        var resultsString = '\n~~~HIGHNOON STATISTICS~~~\n';
+        var resultsString = '\n*=====HIGHNOON STATISTICS=====*\n```';
         for (var index = 0; index < rows.length; index++) {
           resultsString = resultsString + rows[index].username + ' - wins: ' + rows[index].wins + ', losses: ' + rows[index].losses + '\n';
         }
+        resultsString += '```';
         msg.reply(resultsString);
       }
     });
@@ -98,36 +99,36 @@ class GameEngine {
   checkSession(msg, result, channelId, person) {
     switch (result) {
       case SESSION_CREATED:
-        msg.reply('New session created in room ' + channelId + ', ' + person + ' designated as first player');
+        msg.reply('_New session created in room *' + channelId + '*, *' + person + '* designated as first player._');
         break;
       case SESSION_FULL:
-        msg.reply('Session is already full! Please wait until the current session is finished, ' + person + '.');
+        msg.reply('_*Session is already full!* Please wait until the current session is finished, *' + person + '.*_');
         break;
       case SESSION_REMOVED:
-        msg.reply('Session successfully removed from room ' + channelId);
+        msg.reply('_Session successfully removed from room *' + channelId + '.*_');
         break;
       case SESSION_DOES_NOT_EXIST:
-        msg.reply('There was not a session made yet!  Please type &highnoon to start a session.');
+        msg.reply('_*There was not a session made yet!*  Please type *&highnoon* to start a session._');
         break;
       case PLAYER_ADDED:
-        msg.reply('Another player, ' + person + ', added to session in room ' + channelId);
+        msg.reply('_Another player, *' + person + '*, added to session in room *' + channelId + '.*_');
         break;
       case ALL_PLAYER_SLOTS_FILLED:
-        msg.reply('All player slots have been filled.  Everyone, please type \'ready\' to begin the duel.');
+        msg.reply('_*All player slots have been filled.*  Everyone, please type *\'ready\'* to begin the duel._');
         break;
       case NOT_ENOUGH_PLAYERS:
-        msg.reply('Sorry, looks like someone is missing out or just left the duel! Please invite more people to fill in the session.');
+        msg.reply('_Sorry, looks like someone is missing out or just left the duel! *Please invite more people to fill in the session.*_');
         break;
       case PLAYER_IS_READY:
-        msg.reply('You are now ready, player ' + person);
+        msg.reply('You are now *ready*, player *' + person + '.*');
         break;
       case PLAYER_ALREADY_READY:
-        msg.reply('Calm your shit down ' + person + '!  You\'re already ready.  Please wait for the other players to ready up...')
+        msg.reply('Calm your shit down *' + person + '*!  *You\'re already ready.*  Please wait for the other players to ready up...')
         break;
       case ALL_PLAYERS_READY:
-        msg.reply('All players are now ready.  Game\'s about to begin...');
+        msg.reply('_All players are now ready.  Game\'s about to begin..._');
         SessionStore[channelId].startGame();
-        var intro = 'Okay ';
+        var intro = '*Okay ';
         var counter = SessionStore[channelId].getMaxPlayers();
         for (var player in SessionStore[channelId].players) {
           intro = intro + player;
@@ -136,34 +137,34 @@ class GameEngine {
             intro += ', ';
           }
         }
-        intro = intro + '!  This town ain\'t big enough for the ' + SessionStore[channelId].getMaxPlayers() + ' of you.';
+        intro = intro + '!*  This town ain\'t big enough for the ' + SessionStore[channelId].getMaxPlayers() + ' of you.';
         var GE = this;
         setTimeout(function() {
           msg.reply(intro);
-          msg.reply('It\'s hiiiiigh noon...');
+          msg.reply('_*It\'s hiiiiigh noon...*_');
           GE.startTimer(msg, SessionStore[channelId]);
         }, 2500);
         break;
       case GAME_IN_PROGRESS:
-        msg.reply('Sorry! The game is already in progress, you can\'t run that command!');
+        msg.reply('_Sorry! *The game is already in progress*, you can\'t run that command!_');
         break;
       case INVALID_NUMBER_OF_PLAYERS:
-        msg.reply('Sorry! The number of players you\'ve chosen is invalid. Please try a number between 2 and 10.');
+        msg.reply('_*Sorry! The number of players you\'ve chosen is invalid.* Please try a number between *2 and 10.*_');
         break;
       case PLAYER_REMOVED:
-        msg.reply('Player ' + person + ' has been removed from session ' + channelId);
+        msg.reply('Player *' + person + '* has been removed from session ' + channelId);
         break;
       case PLAYER_DOES_NOT_EXIST:
-        msg.reply('Player ' + person + ' does not exist in the current session! Are you sure you got the right person?');
+        msg.reply('Player *' + person + '* does not exist in the current session! Are you sure you got the right person?');
         break;
       case PLAYER_DID_NOT_JOIN:
-        msg.reply('Sorry! You didn\'t join this session yet. Try typing in \'&highnoon\' to join the game.');
+        msg.reply('_Sorry! *You didn\'t join this session yet.* Try typing in \'&highnoon\' to join the game._');
         break;
       case PLAYER_ALREADY_IN_SESSION:
-        msg.reply('You are already in this session ' + person + '!');
+        msg.reply('_You are already in this session *' + person + '*!_');
         break;
       default:
-        msg.reply('Sorry, the session is already full. Please try again in a little bit!');
+        msg.reply('_*Sorry, the session is already full.* Please try again in a little bit!_');
     };
   }
 
@@ -197,15 +198,15 @@ class GameEngine {
     var sessionExists = Boolean(session);
     if (sessionExists) {
       if (direction !== 'left' && direction !== 'right') {
-        msg.reply('You cannot move in that direction, please try \'DODGE! left\' or \'DODGE! right\' instead.');
+        msg.reply('_You cannot move in that direction, please try *\'DODGE! left\'* or *\'DODGE! right\'* instead._');
       } else if (session.sessionIsFull() && session.isTimeToDraw()) {
         session.players[player].setDodge(direction);
-        msg.reply(player + ' dodges ' + direction + '!');
+        msg.reply('_*' + player + ' dodges ' + direction + '!*_');
       } else {
-        msg.reply('The duel has not started yet!  Please wait for everyone to be ready first before proceeding.');
+        msg.reply('_*The duel has not started yet!*  Please wait for everyone to be ready first before proceeding._');
       }
     } else {
-      msg.reply('Sorry! A session has not started yet.  Please type in &highnoon to start a session.');
+      msg.reply('_Sorry! *A session has not started yet.*  Please type in *&highnoon* to start a session._');
     }
   }
 
@@ -222,28 +223,28 @@ class GameEngine {
             if (session.players[shooter].isAlive()) {
               if (session.players[victim]) {
                 if (victim == shooter) {
-                  msg.reply('If you really want to shoot yourself ' + shooter + ', please try a Russian roulette instead...');
+                  msg.reply('_If you really want to shoot yourself *' + shooter + '*, please try a Russian roulette instead..._');
                 } else {
                   if (session.players[victim].isAlive()) {
                     if (session.players[victim].dodgeDirection() !== direction) {
-                      msg.reply(shooter + ', YOU MISSED!');
+                      msg.reply('_*' + shooter + ', YOU MISSED!*_');
                     } else {
-                      msg.reply(shooter + ' shot ' + victim + ' ' + CAUSE_OF_DEATH[Math.floor(Math.random() * CAUSE_OF_DEATH.length)] + ' ' + victim + ' falls dead.');
+                      msg.reply('_*' + shooter + '* shot *' + victim + '* ' + CAUSE_OF_DEATH[Math.floor(Math.random() * CAUSE_OF_DEATH.length)] + ' *' + victim + '* falls *DEAD*!_');
                       session.players[victim].gotShot();
                       session.increaseDeathCount();
                     }
                   } else {
-                    msg.reply(victim + ' is already dead! No need to overkill, ' + shooter + '!');
+                    msg.reply('*' + victim + '* is already *DEAD*! No need to overkill, *' + shooter + '*!');
                   }
                 }
               } else {
-                msg.reply(shooter + ' shoots in the air and hits...nothing. Huh???');
+                msg.reply('*' + shooter + '* shoots in the air and hits...nothing. *_Huh???_*');
               }
             } else {
-              msg.reply('Sorry ' + shooter + ', you\'re already dead!');
+              msg.reply('Sorry *' + shooter + '*, you\'re already *DEAD*!');
             }
           } else {
-            msg.reply(shooter + ' misfired! ' + shooter + ' is DEAD and out of the duel!');
+            msg.reply('_*' + shooter + '* misfired! *' + shooter + '* is *DEAD* and out of the duel!_');
             session.players[shooter].gotShot();
             session.increaseDeathCount();
           }
@@ -254,20 +255,20 @@ class GameEngine {
             var recordResults;
             for (var player in session.players) {
               if (session.players[player].isAlive()) {
-                msg.reply(player + ' is the last person standing. ' + player + ' wins the duel!');
+                msg.reply(':confetti_ball: *' + player + ' is the last person standing. ' + player + ' wins the duel!* :confetti_ball:');
               }
               this.recordResults(msg, session, player);
             }
             SI.removeSession(msg, channelId);
           }
         } else {
-          msg.reply('HEY! You\'re not part of this duel! Take a seat son and wait for your turn!');
+          msg.reply('_*HEY! You\'re not part of this duel! Take a seat son and wait for your turn!*_');
         }
       } else {
-        msg.reply('Please wait for all players to enter the game first before shooting! (Players needed: ' + session.playersNeeded() + ')');
+        msg.reply('_Please wait for all players to enter the game first before shooting!_ *(Players needed: ' + session.playersNeeded() + ')*');
       }
     } else {
-      msg.reply('Sorry! A session has not started yet.  Please type in &highnoon to start a session.');
+      msg.reply('_Sorry! *A session has not started yet.*  Please type in *&highnoon* to start a session._');
     }
   }
 
@@ -276,7 +277,7 @@ class GameEngine {
     if (sessionExists) {
       msg.reply('Generated timer for session in room ' + channelId + ' was set to ' + session.getCountdownValue());
     } else {
-      msg.reply('Sorry! A session has not been made yet.  Please type in &highnoon to start a session first.');
+      msg.reply('Sorry! A session has not been made yet.  Please type in *&highnoon* to start a session first.');
     }
   }
 
