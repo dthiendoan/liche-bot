@@ -99,7 +99,7 @@ class GameEngine {
   checkSession(msg, result, channelId, person) {
     switch (result) {
       case SESSION_CREATED:
-        msg.reply('_New session created in room *' + channelId + '* of ' + SessionStore[channelId].getMaxPlayers() + ' people, *' + person + '* designated as first player._');
+        msg.reply('_New session created in room *' + channelId + '* of *' + SessionStore[channelId].getMaxPlayers() + ' people*, *' + person + '* designated as first player._');
         break;
       case SESSION_FULL:
         msg.reply('_*Session is already full!* Please wait until the current session is finished, *' + person + '.*_');
