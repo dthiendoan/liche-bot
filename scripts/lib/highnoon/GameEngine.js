@@ -128,7 +128,7 @@ class GameEngine {
       case ALL_PLAYERS_READY:
         msg.reply('_All players are now ready.  Game\'s about to begin..._');
         SessionStore[channelId].startGame();
-        var intro = '_*Okay ';
+        var intro = 'Okay *';
         var counter = SessionStore[channelId].getMaxPlayers();
         for (var player in SessionStore[channelId].players) {
           intro = intro + player;
@@ -137,7 +137,7 @@ class GameEngine {
             intro += ', ';
           }
         }
-        intro = intro + '!*  This town ain\'t big enough for the ' + SessionStore[channelId].getMaxPlayers() + ' of you._';
+        intro = intro + '!*  This town ain\'t big enough for the ' + SessionStore[channelId].getMaxPlayers() + ' of you.';
         var GE = this;
         setTimeout(function() {
           msg.reply(intro);
@@ -227,7 +227,7 @@ class GameEngine {
                 } else {
                   if (session.players[victim].isAlive()) {
                     if (session.players[victim].dodgeDirection() !== direction) {
-                      msg.reply('_*' + shooter + ', YOU MISSED!*_');
+                      msg.reply('_*' + shooter + ', YOU MISSED!*_ :facepalm:');
                     } else {
                       msg.reply('_*' + shooter + '* shot *' + victim + '* ' + CAUSE_OF_DEATH[Math.floor(Math.random() * CAUSE_OF_DEATH.length)] + ' *' + victim + '* is *DEAD*!_ :bugcateternalsleep:');
                       session.players[victim].gotShot();
