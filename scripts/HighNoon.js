@@ -52,6 +52,21 @@ function Highnoon (robot) {
     GE.testDuel(msg, SessionStore[channelId]);
   });
 
+  robot.hear(/DODGE! \w+/i, function (msg) {
+    var player = messageHelper.getPerson(msg);
+    var channelId = messageHelper.getChannelId(msg);
+    var direction = msg.match[0].slice(7);
+    GE.checkDodge(msg, SessionStore[channelId], player, direction);
+  });
+
+  robot.hear(/BANG! \w+ \w+/i, function (msg) {
+    var shooter = messageHelper.getPerson(msg);
+    var channelId = messageHelper.getChannelId(msg);
+    var victim = msg.match[0].slice(6);
+    var direction = msg.match[0].split(' ')[2];
+    GE.checkShot(msg, SessionStore[channelId], channelId, shooter, victim, direction);
+  });
+
   robot.hear(/BANG! \w+/i, function (msg) {
     var shooter = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);

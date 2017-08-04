@@ -3,6 +3,7 @@ class PlayerState {
     this.name = name;
     this.alive = true;
     this.ready = false;
+    this.dodge = null;
   }
 
   getName() {
@@ -11,6 +12,14 @@ class PlayerState {
 
   isAlive() {
     return this.alive;
+  }
+
+  dodgeDirection() {
+    return this.dodge;
+  }
+
+  setDodge(direction) {
+    this.dodge = direction;
   }
 
   gotShot() {

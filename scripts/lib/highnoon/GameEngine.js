@@ -185,7 +185,22 @@ class GameEngine {
     }
   }
 
-  checkShot(msg, session, channelId, shooter, victim) {
+  checkDodge(msg, session, player, direction) {
+    var sessionExists = Boolean(session);
+    if (sessionExists) {
+      if (direction !== 'left' || direction !== 'right') {
+        msg.reply('You cannot move in that direction, please try \'DODGE! left\' or \'DODGE! right\' instead.');
+      } else if (session.sessionIsFull() && session.isTimeToDraw()) {
+        session.players[player].setDodge(direction);
+      } else {
+        msg.reply('The duel has not started yet!  Please wait for everyone to be ready first before proceeding.');
+      }
+    } else {
+      msg.reply('Sorry! A session has not started yet.  Please type in &highnoon to start a session.');
+    }
+  }
+
+  checkShot(msg, session, channelId, shooter, victim, direction = null) {
     var sessionExists = Boolean(session);
     // check if a session exists
     if (sessionExists) {
@@ -201,9 +216,13 @@ class GameEngine {
                   msg.reply('If you really want to shoot yourself ' + shooter + ', please try a Russian roulette instead...');
                 } else {
                   if (session.players[victim].isAlive()) {
-                    msg.reply(shooter + ' shot ' + victim + ' ' + CAUSE_OF_DEATH[Math.floor(Math.random() * CAUSE_OF_DEATH.length)] + ' ' + victim + ' falls dead.');
-                    session.players[victim].gotShot();
-                    session.increaseDeathCount();
+                    if (session.players[victim].dodgeDirection() !== direction) {
+                      msg.reply(shooter + ', YOU MISSED!');
+                    } else {
+                      msg.reply(shooter + ' shot ' + victim + ' ' + CAUSE_OF_DEATH[Math.floor(Math.random() * CAUSE_OF_DEATH.length)] + ' ' + victim + ' falls dead.');
+                      session.players[victim].gotShot();
+                      session.increaseDeathCount();
+                    }
                   } else {
                     msg.reply(victim + 'is already dead! No need to overkill, ' + shooter + '!');
                   }
