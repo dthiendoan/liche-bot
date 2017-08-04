@@ -66,13 +66,10 @@ class GameEngine {
       } else {
         var query;
         if (results.length > 0) {
-          console.log('Running:', updateQuery);
           query = connection.query(updateQuery);
         } else {
-          console.log('Running:', insertQuery);
           query = connection.query(insertQuery);
         }
-        console.log('Results of this session have been added to database.');
         return RESULTS_SUCCESSFULLY_RECORDED;
       }
     });
@@ -130,8 +127,14 @@ class GameEngine {
       case ALL_PLAYERS_READY:
         msg.reply('All players are now ready.  Game\'s about to begin...');
         SessionStore[channelId].startGame();
+        var intro = 'Okay ';
+        for (var player in SessionStore[channelId].players) {
+          intro = intro + player + ', ';
+        }
+        intro = intro + '!  This town ain\'t big enough for the ' + SessionStore[channelId].getMaxPlayers() + 'of you.';
         var GE = this;
         setTimeout(function() {
+          msg.reply(intro);
           msg.reply('It\'s hiiiiigh noon...');
           GE.startTimer(msg, SessionStore[channelId]);
         }, 2500);
