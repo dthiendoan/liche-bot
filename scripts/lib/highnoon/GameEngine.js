@@ -136,7 +136,7 @@ class GameEngine {
             intro += ', ';
           }
         }
-        intro = intro + '!  This town ain\'t big enough for the ' + SessionStore[channelId].getMaxPlayers() + 'of you.';
+        intro = intro + '!  This town ain\'t big enough for the ' + SessionStore[channelId].getMaxPlayers() + ' of you.';
         var GE = this;
         setTimeout(function() {
           msg.reply(intro);
