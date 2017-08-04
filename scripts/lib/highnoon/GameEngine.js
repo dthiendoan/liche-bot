@@ -120,7 +120,7 @@ class GameEngine {
         msg.reply('_Sorry, looks like someone is missing out or just left the duel! *Please invite more people to fill in the session.*_');
         break;
       case PLAYER_IS_READY:
-        msg.reply('You are now *ready*, player *' + person + '.*');
+        msg.reply('_You are now *ready*, player *' + person + '.*_');
         break;
       case PLAYER_ALREADY_READY:
         msg.reply('Calm your shit down *' + person + '*!  *You\'re already ready.*  Please wait for the other players to ready up...')
@@ -128,7 +128,7 @@ class GameEngine {
       case ALL_PLAYERS_READY:
         msg.reply('_All players are now ready.  Game\'s about to begin..._');
         SessionStore[channelId].startGame();
-        var intro = '*Okay ';
+        var intro = '_*Okay ';
         var counter = SessionStore[channelId].getMaxPlayers();
         for (var player in SessionStore[channelId].players) {
           intro = intro + player;
@@ -137,7 +137,7 @@ class GameEngine {
             intro += ', ';
           }
         }
-        intro = intro + '!*  This town ain\'t big enough for the ' + SessionStore[channelId].getMaxPlayers() + ' of you.';
+        intro = intro + '!*  This town ain\'t big enough for the ' + SessionStore[channelId].getMaxPlayers() + ' of you._';
         var GE = this;
         setTimeout(function() {
           msg.reply(intro);
@@ -201,7 +201,7 @@ class GameEngine {
         msg.reply('_You cannot move in that direction, please try *\'DODGE! left\'* or *\'DODGE! right\'* instead._');
       } else if (session.sessionIsFull() && session.isTimeToDraw()) {
         session.players[player].setDodge(direction);
-        msg.reply('_*' + player + ' dodges ' + direction + '!*_');
+        msg.reply(':speedlines: _*' + player + ' dodges ' + direction + '!*_ :speedlines:');
       } else {
         msg.reply('_*The duel has not started yet!*  Please wait for everyone to be ready first before proceeding._');
       }
@@ -229,7 +229,7 @@ class GameEngine {
                     if (session.players[victim].dodgeDirection() !== direction) {
                       msg.reply('_*' + shooter + ', YOU MISSED!*_');
                     } else {
-                      msg.reply('_*' + shooter + '* shot *' + victim + '* ' + CAUSE_OF_DEATH[Math.floor(Math.random() * CAUSE_OF_DEATH.length)] + ' *' + victim + '* falls *DEAD*!_');
+                      msg.reply('_*' + shooter + '* shot *' + victim + '* ' + CAUSE_OF_DEATH[Math.floor(Math.random() * CAUSE_OF_DEATH.length)] + ' *' + victim + '* is *DEAD*!_ :bugcateternalsleep:');
                       session.players[victim].gotShot();
                       session.increaseDeathCount();
                     }
@@ -238,10 +238,10 @@ class GameEngine {
                   }
                 }
               } else {
-                msg.reply('*' + shooter + '* shoots in the air and hits...nothing. *_Huh???_*');
+                msg.reply('*' + shooter + '* shoots in the air and hits...nothing. *_Huh???_* :bugcatwat: :bugcatwork:');
               }
             } else {
-              msg.reply('Sorry *' + shooter + '*, you\'re already *DEAD*!');
+              msg.reply('Sorry *' + shooter + '*, you\'re already *DEAD*! :bugcatfff:');
             }
           } else {
             msg.reply('_*' + shooter + '* misfired! *' + shooter + '* is *DEAD* and out of the duel!_');
