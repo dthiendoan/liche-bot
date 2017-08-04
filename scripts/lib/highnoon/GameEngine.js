@@ -99,7 +99,7 @@ class GameEngine {
   checkSession(msg, result, channelId, person) {
     switch (result) {
       case SESSION_CREATED:
-        msg.reply('_New session created in room *' + channelId + '*, *' + person + '* designated as first player._');
+        msg.reply('_New session created in room *' + channelId + '* of ' + SessionStore[channelId].getMaxPlayers() + ' people, *' + person + '* designated as first player._');
         break;
       case SESSION_FULL:
         msg.reply('_*Session is already full!* Please wait until the current session is finished, *' + person + '.*_');
@@ -149,7 +149,7 @@ class GameEngine {
         msg.reply('_Sorry! *The game is already in progress*, you can\'t run that command!_');
         break;
       case INVALID_NUMBER_OF_PLAYERS:
-        msg.reply('_*Sorry! The number of players you\'ve chosen is invalid.* Please try a number between *2 and 10.*_');
+        msg.reply('_*Sorry! The number of players you\'ve chosen is invalid.* Please try a number *between 2 and 10.*_');
         break;
       case PLAYER_REMOVED:
         msg.reply('Player *' + person + '* has been removed from session ' + channelId);
@@ -255,7 +255,7 @@ class GameEngine {
             var recordResults;
             for (var player in session.players) {
               if (session.players[player].isAlive()) {
-                msg.reply(':confetti_ball: *' + player + ' is the last person standing. ' + player + ' wins the duel!* :confetti_ball:');
+                msg.reply(':confetti_ball::confetti_ball::confetti_ball: *' + player + ' is the last person standing. ' + player + ' wins the duel!* :confetti_ball::confetti_ball::confetti_ball:');
               }
               this.recordResults(msg, session, player);
             }
