@@ -228,7 +228,7 @@ class GameEngine {
                   }
                 }
               } else {
-                msg.reply(shooter + 'shoots in the air and hits...nothing. Huh???');
+                msg.reply(shooter + ' shoots in the air and hits...nothing. Huh???');
               }
             } else {
               msg.reply('Sorry ' + shooter + ', you\'re already dead!');

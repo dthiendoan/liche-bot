@@ -62,8 +62,9 @@ function Highnoon (robot) {
   robot.hear(/BANG! \w+ \w+$/i, function (msg) {
     var shooter = messageHelper.getPerson(msg);
     var channelId = messageHelper.getChannelId(msg);
-    var victim = msg.match[0].slice(6);
-    var direction = msg.match[0].split(' ')[2];
+    var args = msg.match[0].split(' ');
+    var victim = args[1];
+    var direction = args[2];
     GE.checkShot(msg, SessionStore[channelId], channelId, shooter, victim, direction);
   });
 
