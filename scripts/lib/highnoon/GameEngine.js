@@ -128,8 +128,13 @@ class GameEngine {
         msg.reply('All players are now ready.  Game\'s about to begin...');
         SessionStore[channelId].startGame();
         var intro = 'Okay ';
+        var counter = SessionStore[channelId].getMaxPlayers();
         for (var player in SessionStore[channelId].players) {
-          intro = intro + player + ', ';
+          intro = intro + player;
+          counter--;
+          if (counter !== 0) {
+            intro += ', ';
+          }
         }
         intro = intro + '!  This town ain\'t big enough for the ' + SessionStore[channelId].getMaxPlayers() + 'of you.';
         var GE = this;
