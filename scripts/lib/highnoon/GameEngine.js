@@ -77,7 +77,7 @@ class GameEngine {
 
   showResults(msg) {
     var connection = connectionHelper.getConnection();
-    var selectQuery = 'SELECT * FROM highnoon';
+    var selectQuery = 'SELECT * FROM highnoon ORDER BY wins';
 
     connection.query(selectQuery, function(err, rows) {
       if (err) {
