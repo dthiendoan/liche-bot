@@ -188,7 +188,7 @@ class GameEngine {
   checkDodge(msg, session, player, direction) {
     var sessionExists = Boolean(session);
     if (sessionExists) {
-      if (direction !== 'left' || direction !== 'right') {
+      if (direction !== 'left' && direction !== 'right') {
         msg.reply('You cannot move in that direction, please try \'DODGE! left\' or \'DODGE! right\' instead.');
       } else if (session.sessionIsFull() && session.isTimeToDraw()) {
         session.players[player].setDodge(direction);
